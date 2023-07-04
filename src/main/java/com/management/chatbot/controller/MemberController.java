@@ -39,11 +39,18 @@ public class MemberController {
 
         try {
             List<HashMap<String, Object>> outputs = new ArrayList<>();
+            List<HashMap<String, Object>> buttons = new ArrayList<>();
             HashMap<String, Object> template = new HashMap<>();
             HashMap<String, Object> simpleText = new HashMap<>();
             HashMap<String, Object> text = new HashMap<>();
+            HashMap<String, Object> button = new HashMap<>();
 
+            button.put("label", "챌린지 신청하기");
+            button.put("action", "block");
+            buttons.add(button);
+            text.put("buttons", buttons);
             text.put("text", requestDto.getName() + "님 안녕하세요!");
+
             simpleText.put("simpleText", text);
             outputs.add(simpleText);
 
