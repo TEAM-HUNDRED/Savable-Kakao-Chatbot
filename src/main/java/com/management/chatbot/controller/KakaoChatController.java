@@ -1,6 +1,7 @@
 package com.management.chatbot.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.management.chatbot.service.dto.KakaoRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
@@ -69,37 +70,13 @@ public class KakaoChatController {
     }
 
     //카카오톡 오픈빌더로 리턴할 스킬 API
-    @RequestMapping(value = "/new-member", method = {RequestMethod.POST, RequestMethod.GET}, headers = {"Accept=application/json"})
-    public HashMap<String, Object> joinMember(@RequestBody Map<String, Object> params, HttpServletRequest request, HttpServletResponse response) {
+    @PostMapping(value = "/new-member")
+    public HashMap<String, Object> joinMember(@RequestBody KakaoRequestDto kakaoRequestDto) {
 
         HashMap<String, Object> resultJson = new HashMap<>();
 
-        try {
-
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonInString = mapper.writeValueAsString(params);
-            System.out.println(jsonInString);
-
-            HashMap<String,Object> userRequest =  (HashMap<String,Object>)params.get("userRequest");
-            String utter = userRequest.get("utterance").toString().replace("\n","");
-
-            List<HashMap<String, Object>> outputs = new ArrayList<>();
-            HashMap<String, Object> template = new HashMap<>();
-            HashMap<String, Object> simpleText = new HashMap<>();
-            HashMap<String, Object> text = new HashMap<>();
-
-            text.put("text", utter + "님 안녕하세요. Savable에 오신 것을 환영합니다 :)");
-            simpleText.put("simpleText", text);
-            outputs.add(simpleText);
-
-            template.put("outputs", outputs);
-
-            resultJson.put("version", "2.0");
-            resultJson.put("template", template);
-
-        } catch (Exception e) {
-
-        }
+        System.out.println(kakaoRequestDto.getUserRequest().getUser().getId());
+        System.out.println(kakaoRequestDto.getAction().getParams().get("userNickname"));
 
         System.out.println("KKORestAPI.callAPI");
 
