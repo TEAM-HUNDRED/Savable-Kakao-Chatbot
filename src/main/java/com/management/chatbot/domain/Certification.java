@@ -1,33 +1,40 @@
 package com.management.chatbot.domain;
 
-import jakarta.persistence.*;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Getter @Setter
 @NoArgsConstructor
-public class Certification {
+public class Certification implements Serializable {
 
-    private Long challengeId; // 챌린지 id
+    private Long id; // 챌린지 id
 
-    @ElementCollection
-    @Convert(converter = ListToJsonConverter.class)
-    private List<CertInfo> certInfoList = new ArrayList<>();
+    @Type(JsonBinaryType.class)
+    @Column(columnDefinition = "jsonb")
+    private List<CertInfo> cert = new ArrayList<>();
 
     @Builder
-    public Certification(Long challengeId, List<CertInfo> certInfoList) {
-        this.challengeId = challengeId;
-        this.certInfoList = certInfoList;
+    public Certification(Long id, List<CertInfo> cert) {
+        this.id = id;
+        this.cert = cert;
     }
 
-    public void update(Long challengeId, List<CertInfo> certInfoList) {
-        this.challengeId = challengeId;
-        this.certInfoList = certInfoList;
+    @Override
+    public String toString(){
+        return "Certification{" +
+                "id=" + id +
+                ", cert=" + cert +
+                "}";
     }
 }
