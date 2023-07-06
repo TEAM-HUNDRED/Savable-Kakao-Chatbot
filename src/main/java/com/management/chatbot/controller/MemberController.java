@@ -6,6 +6,7 @@ import com.management.chatbot.domain.Certification;
 import com.management.chatbot.domain.Member;
 import com.management.chatbot.domain.Participation;
 import com.management.chatbot.service.MemberService;
+import com.management.chatbot.service.dto.KakaoResponseDto;
 import com.management.chatbot.service.dto.MemberSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,6 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @RestController
-@RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -24,7 +24,7 @@ public class MemberController {
     public HashMap<String, Object> joinMember(@RequestBody KakaoRequestDto kakaoRequestDto) {
 
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
-        String name = kakaoRequestDto.getAction().getParams().get("userNickname");
+        String name = kakaoRequestDto.getAction().getParams().get("User_confirm");
 
         MemberSaveRequestDto requestDto = MemberSaveRequestDto.builder()
                 .name(name)
@@ -35,80 +35,10 @@ public class MemberController {
 
         memberService.save(requestDto); // 새로운 유저 저장
 
-        HashMap<String, Object> resultJson = new HashMap<>();
+        KakaoResponseDto kakaoResponseDto = new KakaoResponseDto();
 
-        try {
-            List<HashMap<String, Object>> outputs = new ArrayList<>();
-            List<HashMap<String, Object>> buttons = new ArrayList<>();
-            HashMap<String, Object> template = new HashMap<>();
-            HashMap<String, Object> simpleText = new HashMap<>();
-            HashMap<String, Object> text = new HashMap<>();
-            HashMap<String, Object> button = new HashMap<>();
-
-            button.put("label", "챌린지 신청하기");
-            button.put("action", "block");
-            buttons.add(button);
-            text.put("buttons", buttons);
-            text.put("text", requestDto.getName() + "님 안녕하세요!");
-
-            simpleText.put("simpleText", text);
-            outputs.add(simpleText);
-
-            template.put("outputs", outputs);
-
-            resultJson.put("version", "2.0");
-            resultJson.put("template", template);
-
-        } catch (Exception e) {
-
-        }
-
-        System.out.println("KKORestAPI.callAPI");
-
-        return resultJson;
-    }
-
-
-    @GetMapping("/test") // 챌린지 테스트
-    public String test() {
-        Long nowDate = System.currentTimeMillis();
-        Participation participationA = new Participation();
-        participationA.setEndDate(new Timestamp(nowDate));
-        participationA.setStartDate(new Timestamp(nowDate));
-        participationA.setCertificationCnt(1);
-        participationA.setChallengeId(1L);
-
-        Participation participationB = new Participation();
-        participationB.setEndDate(new Timestamp(nowDate));
-        participationB.setStartDate(new Timestamp(nowDate));
-        participationB.setCertificationCnt(5);
-        participationB.setChallengeId(2L);
-
-
-        CertInfo certInfoA = new CertInfo();
-        certInfoA.setDate(new Timestamp(nowDate));
-        certInfoA.setImage("test_url22");
-        CertInfo certInfoB = new CertInfo();
-        certInfoB.setDate(new Timestamp(nowDate));
-        certInfoB.setImage("test_url33");
-
-        Certification certificationA = new Certification();
-        certificationA.setId(1L);
-        certificationA.setCert(Arrays.asList(certInfoA, certInfoB));
-
-        Member member = new Member();
-        member.setName("test");
-        member.setSavedMoney(100000L);
-        member.setReward(1000L);
-        member.setKakaoId("test_kakaoId");
-        member.setParticipationList(
-                Arrays.asList(participationA, participationB)
-        );
-        member.setCertificationList(
-                Arrays.asList(certificationA)
-        );
-        member.setName("test_name");
-
-        return "test";
+        return new KakaoResponseDto().makeResponseBody(name + "님 안녕하세요 :)\rSavable에 오신 것을 환영합니다."
+                + System.lineSeparator()
+                + "챌린지에 참여하고 싶다면 하단의 \"챌린지 종류\" 버튼을 눌러 챌린지 종류를 확인하고 \"신청하기\" 버튼을 클릭해주세요☺️");
     }
 }

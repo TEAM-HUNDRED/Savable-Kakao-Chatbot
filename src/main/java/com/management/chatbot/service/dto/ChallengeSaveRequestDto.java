@@ -12,15 +12,10 @@ import java.sql.Timestamp;
 public class ChallengeSaveRequestDto {
 
     private String title;
-
     private Long period;
-
     private Timestamp startDate;
-
     private Timestamp endDate;
-
     private Long savedMoney;
-
     private Long reward;
 
     @Builder

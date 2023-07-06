@@ -47,4 +47,12 @@ public class Member {
         this.kakaoId = kakaoId;
         this.kakaoName = kakaoName;
     }
+
+    public void addParticipation(Participation participation) {
+        if (this.participationList == null){
+            this.participationList = new ArrayList<Participation>();
+        }
+
+        this.participationList.add(participation);
+    }
 }

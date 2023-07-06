@@ -70,7 +70,7 @@ public class KakaoChatController {
     }
 
     //카카오톡 오픈빌더로 리턴할 스킬 API
-    @PostMapping(value = "/new-member")
+    @PostMapping(value = "/new-member2")
     public HashMap<String, Object> joinMember(@RequestBody KakaoRequestDto kakaoRequestDto) {
 
         HashMap<String, Object> resultJson = new HashMap<>();

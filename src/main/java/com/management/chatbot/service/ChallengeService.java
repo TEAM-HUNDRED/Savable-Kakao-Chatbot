@@ -24,6 +24,7 @@ public class ChallengeService {
         return new ChallengeResponseDto(entity);
     }
 
+
     @Transactional // 새로운 챌린지 추가
     public Long save(ChallengeSaveRequestDto requestDto) {
         return challengeRepository.save(requestDto.toEntity()).getId();
