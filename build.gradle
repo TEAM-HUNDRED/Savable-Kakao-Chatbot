@@ -30,6 +30,8 @@ dependencies {
 	implementation("com.vladmihalcea:hibernate-types-60:2.20.0")
 	implementation 'org.postgresql:postgresql'
 	implementation 'io.hypersistence:hypersistence-utils-hibernate-62:3.5.0'
+	implementation('ch.qos.logback:logback-classic')
+	implementation('org.slf4j:slf4j-api')
 }
 
 tasks.named('test') {

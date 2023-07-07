@@ -1,7 +1,7 @@
 package com.management.chatbot.controller;
 
-import com.management.chatbot.service.dto.ChallengeSaveRequestDto;
 import com.management.chatbot.service.ChallengeService;
+import com.management.chatbot.service.dto.ChallengeSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

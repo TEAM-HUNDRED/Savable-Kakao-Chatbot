@@ -1,7 +1,9 @@
 package com.management.chatbot.domain;
 
-import jakarta.persistence.Embeddable;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

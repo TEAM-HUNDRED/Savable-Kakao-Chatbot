@@ -1,18 +1,15 @@
 package com.management.chatbot.controller;
 
-import com.management.chatbot.service.dto.KakaoRequestDto;
-import com.management.chatbot.domain.CertInfo;
-import com.management.chatbot.domain.Certification;
-import com.management.chatbot.domain.Member;
-import com.management.chatbot.domain.Participation;
 import com.management.chatbot.service.MemberService;
+import com.management.chatbot.service.dto.KakaoRequestDto;
 import com.management.chatbot.service.dto.KakaoResponseDto;
 import com.management.chatbot.service.dto.MemberSaveRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Timestamp;
-import java.util.*;
+import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor

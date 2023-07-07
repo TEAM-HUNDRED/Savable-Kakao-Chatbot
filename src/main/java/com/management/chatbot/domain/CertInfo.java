@@ -14,11 +14,13 @@ import java.sql.Timestamp;
 public class CertInfo implements Serializable{
     private String image;
     private Timestamp date;
+    private Boolean check;
 
     @Builder
     public CertInfo(String image, Timestamp date) {
         this.image = image;
         this.date = date;
+        this.check = null;
     }
 
     @Override
@@ -26,8 +28,7 @@ public class CertInfo implements Serializable{
         return "CertInfo{" +
                 "image=" + image +
                 ", date=" + date +
+                ", check=" + check +
                 "}";
     }
-
-
 }

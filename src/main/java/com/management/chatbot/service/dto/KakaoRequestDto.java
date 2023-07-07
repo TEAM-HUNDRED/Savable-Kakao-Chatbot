@@ -17,8 +17,6 @@ public class KakaoRequestDto {
     public static class Intent {
         private String id;
         private String name;
-
-        // 생성자, getter, setter 생략
     }
 
     @Getter
@@ -52,18 +50,17 @@ public class KakaoRequestDto {
 
     @Getter
     public static class Action {
-        private String name;
-        private Object clientExtra;
-        private Map<String, String> params;
         private String id;
+        private String name;
+        private Map<String, String> clientExtra;
+        private Map<String, String> params;
         private Map<String, DetailParam> detailParams;
     }
 
     @Getter
     public static class DetailParam {
-        private String origin;
-
-        private String value;
         private String groupName;
+        private String origin;
+        private String value;
     }
 }

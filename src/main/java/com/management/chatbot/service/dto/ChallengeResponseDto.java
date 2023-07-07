@@ -14,6 +14,8 @@ public class ChallengeResponseDto {
     private Long period;
     private Timestamp startDate;
     private Timestamp endDate;
+    private Long savedMoney;
+    private Long reward;
 
     public ChallengeResponseDto(Challenge entity) {
         this.id = entity.getId();
@@ -21,5 +23,7 @@ public class ChallengeResponseDto {
         this.period = entity.getPeriod();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
+        this.savedMoney = entity.getSavedMoney();
+        this.reward = entity.getReward();
     }
 }

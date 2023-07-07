@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class ParticipationSaveRequestDto {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
     private Long challengeId; // 챌린지 id
     private Long certificationCnt;
     private Timestamp startDate;
