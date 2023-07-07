@@ -45,6 +45,7 @@ public class MemberService {
         CertInfo certInfo = new CertInfo().builder()
                 .image(certificationImage)
                 .date(new Timestamp(System.currentTimeMillis()))
+                .check(null)
                 .build();
 
         Long savedMoney = challengeResponseDto.getSavedMoney();
