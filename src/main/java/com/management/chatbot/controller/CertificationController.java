@@ -31,7 +31,7 @@ public class CertificationController {
         ChallengeResponseDto challengeResponseDto = challengeService.findByTitle(challengeTitle);
 
         // 인증
-        Member member = memberService.certify(kakaoId, challengeResponseDto.getId(), certificationImage, challengeResponseDto);
+        Member member = memberService.certify(kakaoId, certificationImage, challengeResponseDto);
 
         String message = member.getName() + " 세이버님 안녕하세요\r"
                 + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r"

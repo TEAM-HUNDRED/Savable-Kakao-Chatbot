@@ -40,7 +40,7 @@ public class MemberService {
     }
 
     @Transactional
-    public Member certify(String kakaoId, Long challengeId, String certificationImage, ChallengeResponseDto challengeResponseDto){
+    public Member certify(String kakaoId, String certificationImage, ChallengeResponseDto challengeResponseDto){
         Member member = memberRepository.findByKakaoId(kakaoId); //동일한 카카오 아이디를 가진 멤버 find
         CertInfo certInfo = new CertInfo().builder()
                 .image(certificationImage)

@@ -72,8 +72,6 @@ public class KakaoImageRequestDto {
         public static class Block {
             private String id;
             private String name;
-
-            // 생성자, getter, setter 등 필요한 메소드를 추가해주세요.
         }
 
         @Getter
