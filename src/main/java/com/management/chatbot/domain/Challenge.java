@@ -19,7 +19,7 @@ public class Challenge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private Long period;
+    private Long duration;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "Asia/Seoul")
     private Timestamp startDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "Asia/Seoul")
@@ -30,9 +30,9 @@ public class Challenge {
     private Long maxCnt;
 
     @Builder
-    public Challenge(String title, Long period, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward, String certExam, Long maxCnt) {
+    public Challenge(String title, Long duration, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward, String certExam, Long maxCnt) {
         this.title = title;
-        this.period = period;
+        this.duration = duration;
         this.startDate = startDate;
         this.endDate = endDate;
         this.savedMoney = savedMoney;

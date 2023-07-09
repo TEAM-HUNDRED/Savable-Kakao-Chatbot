@@ -33,7 +33,7 @@ public class CertificationController {
         // 인증
         Member member = memberService.certify(kakaoId, certificationImage, challengeResponseDto);
 
-        String message = member.getName() + " 세이버님 안녕하세요\r"
+        String message = member.getUsername() + " 세이버님 안녕하세요\r"
                 + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r"
                 + "💸총 절약 금액: " + member.getSavedMoney() + "원(+" + challengeResponseDto.getSavedMoney() + "원)\r"
                 + "🎁총 세이버블 포인트: " + member.getReward() + "원(+" + challengeResponseDto.getReward() + "원)\r\r"

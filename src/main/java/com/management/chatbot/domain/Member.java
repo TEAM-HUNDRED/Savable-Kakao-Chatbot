@@ -23,7 +23,7 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String username;
 
     // 참여자 정보
     @Type(JsonType.class)
@@ -41,8 +41,8 @@ public class Member {
     private String kakaoName;
 
     @Builder
-    public Member(String name, List<Participation> participationList, List<Certification> certificationList, Long savedMoney, Long reward, String kakaoId, String kakaoName) {
-        this.name = name;
+    public Member(String username, List<Participation> participationList, List<Certification> certificationList, Long savedMoney, Long reward, String kakaoId, String kakaoName) {
+        this.username = username;
         this.participationList = participationList;
         this.certificationList = certificationList;
         this.savedMoney = savedMoney;

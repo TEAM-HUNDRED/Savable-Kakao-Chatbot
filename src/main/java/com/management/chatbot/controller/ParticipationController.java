@@ -102,7 +102,7 @@ public class ParticipationController {
         BasicCard basicCardDto = BasicCard.builder()
                 .title("인증할 챌린지를 선택해주세요😃")
                 .thumbnail(BasicCard.Thumbnail.builder()
-                        .imageUrl("https://raw.githubusercontent.com/TEAM-HUNDRED/Savable-Kakao-Chatbot/3d99c8f3de5e52be04d6790977698aa1be819270/src/main/resources/static/images/challenge-thumbnail.jpg")
+                        .imageUrl("https://raw.githubusercontent.com/TEAM-HUNDRED/Savable-Kakao-Chatbot/6bc3a58b3f524c40a520e312e8395588e3a370e9/src/main/resources/static/images/cert-thumnail.jpg")
                         .build())
                 .buttons(buttonDtoList)
                 .build();
@@ -120,7 +120,7 @@ public class ParticipationController {
         System.out.println(kakaoId);
 
         MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId); // 유저 정보
-        String message = memberResponseDto.getName() + " 세이버님의 현재 절약 현황입니다.\r"
+        String message = memberResponseDto.getUsername() + " 세이버님의 현재 절약 현황입니다.\r"
                 + "💸총 절약 금액: " + memberResponseDto.getSavedMoney() + "원\r"
                 + "🎁총 세이버블 포인트: " + memberResponseDto.getReward() + "원";
         return new KakaoResponseDto().makeResponseBody(message);
