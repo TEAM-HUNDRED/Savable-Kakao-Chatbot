@@ -23,23 +23,16 @@ public class Challenge {
     private Timestamp endDate;
     private Long savedMoney;
     private Long reward;
+    private String certExam;
 
     @Builder
-    public Challenge(String title, Long period, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward) {
+    public Challenge(String title, Long period, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward, String certExam) {
         this.title = title;
         this.period = period;
         this.startDate = startDate;
         this.endDate = endDate;
         this.savedMoney = savedMoney;
         this.reward = reward;
-    }
-
-    public void update(String title, Long period, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward) {
-        this.title = title;
-        this.period = period;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.savedMoney = savedMoney;
-        this.reward = reward;
+        this.certExam = certExam;
     }
 }
