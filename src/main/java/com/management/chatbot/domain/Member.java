@@ -1,5 +1,6 @@
 package com.management.chatbot.domain;
 
+import com.management.chatbot.Exception.AlreadyJoinedException;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
@@ -54,7 +55,25 @@ public class Member {
             this.participationList = new ArrayList<Participation>();
         }
 
+        // 이미 가입한 경우 예외 처리
+        if (isAlreadyJoined(participation)) {
+            throw new AlreadyJoinedException("이미 신청이 완료된 챌린지입니다.");
+        }
+
+
         this.participationList.add(participation);
+    }
+
+    private boolean isAlreadyJoined(Participation participation) {
+        ListIterator<Participation> iter = this.participationList.listIterator();
+
+        while(iter.hasNext()){
+            Participation part = iter.next();
+            if (part.getChallengeId().equals(participation.getChallengeId())){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addCertification(Long challengeId, CertInfo certInfo, Long savedMoney, Long reward){
