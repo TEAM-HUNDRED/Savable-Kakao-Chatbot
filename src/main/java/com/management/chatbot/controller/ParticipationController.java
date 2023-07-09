@@ -38,13 +38,16 @@ public class ParticipationController {
         ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId)); // 챌린지 정보
 
         String challengeTitle = challengeResponseDto.getTitle();
-        SimpleTextDto simpleTextDto = new SimpleTextDto().builder().text(challengeTitle
-                + " 신청이 완료되었습니다.\n앞으로 Savable과 함께 열심히 절약해 나가요🔥").build();
+
+        String participateText = challengeTitle + " 신청이 완료되었습니다.\n앞으로 Savable과 함께 열심히 절약해 나가요🔥";
+        SimpleTextDto simpleTextDto = SimpleTextDto.builder()
+                .text(participateText)
+                .build();
 
         String certExamTitle = "▶️ " + challengeTitle
                 + " 인증 방법\r첨부된 이미지를 참고하여 매일 최대 2회 인증 사진을 보내주세요.\n1회 인증 마다 Savable 포인트 "
                 + challengeResponseDto.getReward()
-                +"원을 받아가실 수 있습니다🥰\n(인증 사진 조작 시 보상 지급이 불가능합니다)";
+                +"원을 받아가실 수 있습니다🥰\n(인증 사진 조작 시 보상 지급이 불가능하며, 패널티가 부과될 수 있습니다.)";
         BasicCard basicCardDto = BasicCard.builder()
                 .title(certExamTitle)
                 .thumbnail(BasicCard.Thumbnail.builder()
@@ -58,6 +61,7 @@ public class ParticipationController {
         simpleText.put("simpleText", simpleTextDto);
         basicCard.put("basicCard", basicCardDto);
         outputs.add(simpleText);
+        outputs.add(basicCard);
 
         return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }

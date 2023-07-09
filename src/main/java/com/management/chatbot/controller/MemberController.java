@@ -36,6 +36,6 @@ public class MemberController {
 
         return new KakaoResponseDto().makeResponseBody(name + "님 안녕하세요 :)\rSavable에 오신 것을 환영합니다."
                 + System.lineSeparator()
-                + "챌린지에 참여하고 싶다면 하단의 \"챌린지 종류\" 버튼을 눌러 챌린지 종류를 확인하고 \"신청하기\" 버튼을 클릭해주세요☺️");
+                + "챌린지에 참여하고 싶다면 하단의 \"챌린지 종류\" 버튼을 눌러주세요☺️");
     }
 }
