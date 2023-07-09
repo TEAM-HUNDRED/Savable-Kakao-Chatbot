@@ -1,11 +1,13 @@
 package com.management.chatbot.controller;
 
-import com.management.chatbot.domain.Certification;
 import com.management.chatbot.domain.Participation;
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.*;
-import jakarta.persistence.Basic;
+import com.management.chatbot.service.dto.KakaoDto.BasicCard;
+import com.management.chatbot.service.dto.KakaoDto.ButtonDto;
+import com.management.chatbot.service.dto.KakaoDto.SimpleImageDto;
+import com.management.chatbot.service.dto.KakaoDto.SimpleTextDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,29 +41,39 @@ public class ParticipationController {
 
         String challengeTitle = challengeResponseDto.getTitle();
 
+        List<HashMap<String, Object>> outputs = new ArrayList<>();
+        HashMap<String, Object> simpleText1 = new HashMap<>();
+        HashMap<String, Object> simpleText2 = new HashMap<>();
+        HashMap<String, Object> simpleImage = new HashMap<>();
+
+        // 메시지 1
         String participateText = challengeTitle + " 신청이 완료되었습니다.\n앞으로 Savable과 함께 열심히 절약해 나가요🔥";
-        SimpleTextDto simpleTextDto = SimpleTextDto.builder()
+        SimpleTextDto simpleTextDto1 = SimpleTextDto.builder()
                 .text(participateText)
                 .build();
 
-        String certExamTitle = "▶️ " + challengeTitle
-                + " 인증 방법\r첨부된 이미지를 참고하여 매일 최대 2회 인증 사진을 보내주세요.\n1회 인증 마다 Savable 포인트 "
-                + challengeResponseDto.getReward()
-                +"원을 받아가실 수 있습니다🥰\n(인증 사진 조작 시 보상 지급이 불가능하며, 패널티가 부과될 수 있습니다.)";
-        BasicCard basicCardDto = BasicCard.builder()
-                .title(certExamTitle)
-                .thumbnail(BasicCard.Thumbnail.builder()
-                        .imageUrl(challengeResponseDto.getCertExam())
-                        .build())
+        simpleText1.put("simpleText", simpleTextDto1);
+        outputs.add(simpleText1);
+
+        // 메시지 2
+        SimpleImageDto simpleImageDto = SimpleImageDto.builder()
+                .imageUrl(challengeResponseDto.getCertExam())
+                .altText(challengeTitle + " 인증 예시 사진")
                 .build();
 
-        List<HashMap<String, Object>> outputs = new ArrayList<>();
-        HashMap<String, Object> simpleText = new HashMap<>();
-        HashMap<String, Object> basicCard = new HashMap<>();
-        simpleText.put("simpleText", simpleTextDto);
-        basicCard.put("basicCard", basicCardDto);
-        outputs.add(simpleText);
-        outputs.add(basicCard);
+        simpleImage.put("simpleImage", simpleImageDto);
+        outputs.add(simpleImage);
+
+        // 메시지 3
+        String certExamTitle = "▶️ " + challengeTitle + " 인증 방법\n첨부된 이미지를 참고하여 인증 사진을 보내주세요.\n\n매일 최대 2회 인증할 수 있으며, 1회 인증 마다 Savable 포인트 "
+                + challengeResponseDto.getReward()
+                +"원을 받아가실 수 있습니다🥰\n(인증 사진 조작 시 보상 지급이 불가능하며, 패널티가 부과될 수 있습니다.)";
+        SimpleTextDto simpleTextDto2 = SimpleTextDto.builder()
+                .text(certExamTitle)
+                .build();
+
+        simpleText2.put("simpleText", simpleTextDto2);
+        outputs.add(simpleText2);
 
         return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }

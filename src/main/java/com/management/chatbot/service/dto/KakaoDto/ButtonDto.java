@@ -1,4 +1,4 @@
-package com.management.chatbot.service.dto;
+package com.management.chatbot.service.dto.KakaoDto;
 
 import lombok.Builder;
 import lombok.Getter;

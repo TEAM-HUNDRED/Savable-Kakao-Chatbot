@@ -1,11 +1,9 @@
-package com.management.chatbot.service.dto;
+package com.management.chatbot.service.dto.KakaoDto;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Getter
