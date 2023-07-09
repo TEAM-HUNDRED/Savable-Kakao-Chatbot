@@ -16,6 +16,7 @@ public class ChallengeResponseDto {
     private Timestamp endDate;
     private Long savedMoney;
     private Long reward;
+    private String certExam;
 
     public ChallengeResponseDto(Challenge entity) {
         this.id = entity.getId();
@@ -25,5 +26,6 @@ public class ChallengeResponseDto {
         this.endDate = entity.getEndDate();
         this.savedMoney = entity.getSavedMoney();
         this.reward = entity.getReward();
+        this.certExam = entity.getCertExam();
     }
 }

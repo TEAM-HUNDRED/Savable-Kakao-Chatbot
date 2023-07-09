@@ -1,7 +1,5 @@
 package com.management.chatbot.service.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +11,7 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 public class KakaoBasicCardResponseDto {
-    public HashMap<String, Object> makeResponseBody(BasicCard entity) {
+    public HashMap<String, Object> makeResponseBody(List<HashMap<String, Object>> values) {
 
         HashMap<String, Object> resultJson = new HashMap<>();
 
@@ -21,8 +19,9 @@ public class KakaoBasicCardResponseDto {
         HashMap<String, Object> template = new HashMap<>();
         HashMap<String, Object> basicCard = new HashMap<>();
 
-        basicCard.put("basicCard", entity);
-        outputs.add(basicCard);
+        for (HashMap<String, Object> value : values) {
+            outputs.add(value);
+        }
 
         template.put("outputs", outputs);
 

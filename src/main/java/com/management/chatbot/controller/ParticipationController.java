@@ -35,9 +35,31 @@ public class ParticipationController {
                 .build();
 
         memberService.participate(kakaoId, participationSaveRequestDto); // 챌린지 참여
+        ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId)); // 챌린지 정보
 
-        return new KakaoResponseDto().makeResponseBody("챌린지 신청이 완료되었습니다.\n" +
-                "앞으로 Savable과 함께 열심히 절약해 나가요🔥");
+        String challengeTitle = challengeResponseDto.getTitle();
+        SimpleTextDto simpleTextDto = new SimpleTextDto().builder().text(challengeTitle
+                + " 신청이 완료되었습니다.\n앞으로 Savable과 함께 열심히 절약해 나가요🔥").build();
+
+        String certExamTitle = "▶️ " + challengeTitle
+                + " 인증 방법\r첨부된 이미지를 참고하여 매일 최대 2회 인증 사진을 보내주세요.\n1회 인증 마다 Savable 포인트 "
+                + challengeResponseDto.getReward()
+                +"원을 받아가실 수 있습니다🥰\n(인증 사진 조작 시 보상 지급이 불가능합니다)";
+        BasicCard basicCardDto = BasicCard.builder()
+                .title(certExamTitle)
+                .thumbnail(BasicCard.Thumbnail.builder()
+                        .imageUrl(challengeResponseDto.getCertExam())
+                        .build())
+                .build();
+
+        List<HashMap<String, Object>> outputs = new ArrayList<>();
+        HashMap<String, Object> simpleText = new HashMap<>();
+        HashMap<String, Object> basicCard = new HashMap<>();
+        simpleText.put("simpleText", simpleTextDto);
+        basicCard.put("basicCard", basicCardDto);
+        outputs.add(simpleText);
+
+        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
     @PostMapping("/participation/menu") // 참여중인 챌린지 목록(인증 시 사용)
@@ -64,12 +86,16 @@ public class ParticipationController {
         BasicCard basicCardDto = BasicCard.builder()
                 .title("인증할 챌린지를 선택해주세요😃")
                 .thumbnail(BasicCard.Thumbnail.builder()
-                        .imageUrl("https://i.imgur.com/3XQ3F0M.png")
+                        .imageUrl("https://raw.githubusercontent.com/TEAM-HUNDRED/Savable-Kakao-Chatbot/3d99c8f3de5e52be04d6790977698aa1be819270/src/main/resources/static/images/challenge-thumbnail.jpg")
                         .build())
                 .buttons(buttonDtoList)
                 .build();
 
-        return new KakaoBasicCardResponseDto().makeResponseBody(basicCardDto);
+        List<HashMap<String, Object>> outputs = new ArrayList<>();
+        HashMap<String, Object> basicCard = new HashMap<>();
+        basicCard.put("basicCard", basicCardDto);
+        outputs.add(basicCard);
+        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
     @PostMapping("/status") // 챌린지 참여 현황
@@ -83,5 +109,4 @@ public class ParticipationController {
                 + "🎁총 세이버블 포인트: " + memberResponseDto.getReward() + "원";
         return new KakaoResponseDto().makeResponseBody(message);
     }
-
 }

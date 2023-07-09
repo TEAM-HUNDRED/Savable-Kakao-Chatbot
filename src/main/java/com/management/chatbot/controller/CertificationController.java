@@ -25,13 +25,13 @@ public class CertificationController {
         // 인증 정보
         String kakaoId = kakaoImageRequestDto.getUserRequest().getUser().getId();
         String certificationImage = kakaoImageRequestDto.getAction().getParams().get("Certification_image");
-        Long challengeId = Long.parseLong(kakaoImageRequestDto.getAction().getClientExtra().get("Challenge_id"));
+        String challengeTitle = kakaoImageRequestDto.getUserRequest().getUtterance();
 
         // 챌린지 정보
-        ChallengeResponseDto challengeResponseDto = challengeService.findById(challengeId);
+        ChallengeResponseDto challengeResponseDto = challengeService.findByTitle(challengeTitle);
 
         // 인증
-        Member member = memberService.certify(kakaoId, challengeId, certificationImage, challengeResponseDto);
+        Member member = memberService.certify(kakaoId, challengeResponseDto.getId(), certificationImage, challengeResponseDto);
 
         String message = member.getName() + " 세이버님 안녕하세요\r"
                 + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r"
