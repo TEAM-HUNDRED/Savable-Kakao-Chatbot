@@ -105,7 +105,7 @@ public class Member {
     }
 
     public boolean isMaxCertification(Long challengeId, Long maxCnt) {
-        if (this.certificationList.isEmpty()) return false;
+        if (this.certificationList == null) return false;
         ListIterator<Certification> iter = this.certificationList.listIterator();
 
         while(iter.hasNext()){
@@ -118,7 +118,7 @@ public class Member {
                     if (currentDate.isEqual(dateFromTimestamp)){
                         cnt++;
                     }
-                } 
+                }
 
                 if (cnt >= maxCnt) return true;
                 else return false;
