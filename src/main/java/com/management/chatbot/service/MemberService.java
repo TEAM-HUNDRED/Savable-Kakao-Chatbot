@@ -1,5 +1,6 @@
 package com.management.chatbot.service;
 
+import com.management.chatbot.Exception.MaxCertificationException;
 import com.management.chatbot.domain.CertInfo;
 import com.management.chatbot.domain.Member;
 import com.management.chatbot.repository.MemberRepository;
@@ -47,8 +48,17 @@ public class MemberService {
                 .check(null)
                 .build();
 
+        Long challengeId = challengeResponseDto.getId();
         Long savedMoney = challengeResponseDto.getSavedMoney();
         Long reward = challengeResponseDto.getReward();
+        Long maxCnt = challengeResponseDto.getMaxCnt();
+
+        // 챌린지 최대 인증 횟수 초과 여부 확인
+        if (member.isMaxCertification(challengeId, maxCnt)) {
+            String message = "하루에 최대 " + maxCnt + "번 인증할 수 있습니다😢\r"
+                    + "내일 다시 인증해주세요.";
+            throw new MaxCertificationException(message);
+        }
 
         member.addCertification(challengeId, certInfo, savedMoney, reward);
         return member;

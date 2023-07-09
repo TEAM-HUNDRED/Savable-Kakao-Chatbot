@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -60,7 +61,6 @@ public class Member {
             throw new AlreadyJoinedException("이미 신청이 완료된 챌린지입니다.");
         }
 
-
         this.participationList.add(participation);
     }
 
@@ -102,5 +102,27 @@ public class Member {
                 .build();
         newCertification.addCert(certInfo);
         this.certificationList.add(newCertification);
+    }
+
+    public boolean isMaxCertification(Long challengeId, Long maxCnt) {
+        ListIterator<Certification> iter = this.certificationList.listIterator();
+
+        while(iter.hasNext()){
+            Certification certification = iter.next();
+            if (certification.getChallenge_id().equals(challengeId)){
+                long cnt = 0;
+                for (CertInfo certInfo: certification.getCert()){
+                    LocalDate currentDate = LocalDate.now();
+                    LocalDate dateFromTimestamp = certInfo.getDate().toLocalDateTime().toLocalDate();
+                    if (currentDate.isEqual(dateFromTimestamp)){
+                        cnt++;
+                    }
+                }
+
+                if (cnt >= maxCnt) return true;
+                else return false;
+            }
+        }
+        return false;
     }
 }
