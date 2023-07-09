@@ -37,7 +37,7 @@ public class CertificationController {
                 + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r"
                 + "💸총 절약 금액: " + member.getSavedMoney() + "원(+" + challengeResponseDto.getSavedMoney() + "원)\r"
                 + "🎁총 세이버블 포인트: " + member.getReward() + "원(+" + challengeResponseDto.getReward() + "원)\r\r"
-                + "앞으로도 Savable과 함께 티끌 모아요\r\r"
+                + "Savable과 함께 티끌 모으기! 앞으로도 함께 해요☺️\r\r"
                 + "(사진 조작 적발 시 인증이 반려될 수 있으며, 추후 패널티가 부과될 예정입니다.)";
         return new KakaoResponseDto().makeResponseBody(message);
     }

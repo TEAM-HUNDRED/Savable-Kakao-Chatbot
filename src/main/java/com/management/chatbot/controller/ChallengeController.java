@@ -17,9 +17,4 @@ public class ChallengeController {
         System.out.println(challengeSaveRequestDto.getTitle());
         return challengeService.save(challengeSaveRequestDto);
     }
-
-    @GetMapping("/test") // 챌린지 테스트
-    public String test() {
-        return "test";
-    }
 }

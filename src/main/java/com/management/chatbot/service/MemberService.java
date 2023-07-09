@@ -27,7 +27,6 @@ public class MemberService {
     @Transactional
     public MemberResponseDto findByKakaoId(String kakaoId) {
         Member member = memberRepository.findByKakaoId(kakaoId);
-        System.out.println(member.getName());
         return new MemberResponseDto(member);
     }
 

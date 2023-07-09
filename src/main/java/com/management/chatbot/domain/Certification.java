@@ -16,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Certification implements Serializable {
 
-
     private Long challenge_id; // 챌린지 id
 
     @Type(JsonBinaryType.class)

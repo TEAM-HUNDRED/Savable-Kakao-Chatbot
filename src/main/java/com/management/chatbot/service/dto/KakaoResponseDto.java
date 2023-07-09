@@ -29,8 +29,6 @@ public class KakaoResponseDto {
         resultJson.put("version", "2.0");
         resultJson.put("template", template);
 
-        System.out.println("KKORestAPI.callAPI");
-
         return resultJson;
     }
 
