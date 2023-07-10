@@ -1,6 +1,7 @@
 package com.management.chatbot.controller;
 
 import com.management.chatbot.Exception.AlreadyJoinedException;
+import com.management.chatbot.Exception.ExistMemberException;
 import com.management.chatbot.Exception.MaxCertificationException;
 import com.management.chatbot.service.dto.KakaoResponseDto;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,6 +21,12 @@ public class ExceptionHandlerController {
     @ExceptionHandler({MaxCertificationException.class})
     @ResponseBody
     public HashMap<String, Object> handleAlreadyJoinedException(MaxCertificationException ex) {
+        return new KakaoResponseDto().makeResponseBody(ex.getMessage());
+    }
+
+    @ExceptionHandler({ExistMemberException.class})
+    @ResponseBody
+    public HashMap<String, Object> handleExistMemberException(ExistMemberException ex) {
         return new KakaoResponseDto().makeResponseBody(ex.getMessage());
     }
 }
