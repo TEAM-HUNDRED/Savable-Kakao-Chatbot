@@ -13,14 +13,10 @@ public class KakaoRequestDto {
     private Bot bot;
     private Action action;
 
-    // 생성자, getter, setter 생략
-
     @Getter
     public static class Intent {
         private String id;
         private String name;
-
-        // 생성자, getter, setter 생략
     }
 
     @Getter
@@ -31,16 +27,12 @@ public class KakaoRequestDto {
         private String utterance;
         private String lang;
         private User user;
-
-        // 생성자, getter, setter 생략
     }
 
     @Getter
     public static class Block {
         private String id;
         private String name;
-
-        // 생성자, getter, setter 생략
     }
 
     @Getter
@@ -48,36 +40,27 @@ public class KakaoRequestDto {
         private String id;
         private String type;
         private Map<String, Object> properties;
-
-        // 생성자, getter, setter 생략
     }
 
     @Getter
     public static class Bot {
         private String id;
         private String name;
-
-        // 생성자, getter, setter 생략
     }
 
     @Getter
     public static class Action {
-        private String name;
-        private Object clientExtra;
-        private Map<String, String> params;
         private String id;
+        private String name;
+        private Map<String, String> clientExtra;
+        private Map<String, String> params;
         private Map<String, DetailParam> detailParams;
-
-        // 생성자, getter, setter 생략
     }
 
     @Getter
     public static class DetailParam {
-        private String origin;
-
-        private String value;
         private String groupName;
-
-        // 생성자, getter, setter 생략
+        private String origin;
+        private String value;
     }
 }

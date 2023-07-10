@@ -2,8 +2,6 @@ package com.management.chatbot.domain;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Certification implements Serializable {
 
-    private Long id; // 챌린지 id
+    private Long challenge_id; // 챌린지 id
 
     @Type(JsonBinaryType.class)
     @Column(columnDefinition = "jsonb")
@@ -26,15 +24,19 @@ public class Certification implements Serializable {
 
     @Builder
     public Certification(Long id, List<CertInfo> cert) {
-        this.id = id;
+        this.challenge_id = id;
         this.cert = cert;
     }
 
     @Override
     public String toString(){
         return "Certification{" +
-                "id=" + id +
+                "challenge_id=" + challenge_id +
                 ", cert=" + cert +
                 "}";
+    }
+
+    public void addCert(CertInfo certInfo){
+        this.cert.add(certInfo);
     }
 }

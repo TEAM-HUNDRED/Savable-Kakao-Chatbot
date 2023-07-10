@@ -24,6 +24,16 @@ public class ChallengeService {
         return new ChallengeResponseDto(entity);
     }
 
+    @Transactional
+    public ChallengeResponseDto findByTitle(String title){
+        Challenge entity = challengeRepository.findByTitle(title)
+                .orElseThrow(() -> new
+                        IllegalArgumentException("해당 챌린지는 존재하지 않습니다. title= " + title));
+
+        return new ChallengeResponseDto(entity);
+    }
+
+
     @Transactional // 새로운 챌린지 추가
     public Long save(ChallengeSaveRequestDto requestDto) {
         return challengeRepository.save(requestDto.toEntity()).getId();

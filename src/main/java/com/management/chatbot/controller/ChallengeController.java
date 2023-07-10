@@ -1,7 +1,7 @@
 package com.management.chatbot.controller;
 
-import com.management.chatbot.service.dto.ChallengeSaveRequestDto;
 import com.management.chatbot.service.ChallengeService;
+import com.management.chatbot.service.dto.ChallengeSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +16,5 @@ public class ChallengeController {
     public Long save(@RequestBody ChallengeSaveRequestDto challengeSaveRequestDto) {
         System.out.println(challengeSaveRequestDto.getTitle());
         return challengeService.save(challengeSaveRequestDto);
-    }
-
-    @GetMapping("/test") // 챌린지 테스트
-    public String test() {
-        return "test";
     }
 }

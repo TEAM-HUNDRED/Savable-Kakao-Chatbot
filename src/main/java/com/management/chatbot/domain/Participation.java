@@ -1,7 +1,9 @@
 package com.management.chatbot.domain;
 
-import jakarta.persistence.Embeddable;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -11,9 +13,17 @@ import java.sql.Timestamp;
 public class Participation implements Serializable{
 
     private Long challengeId; // 챌린지 id
-    private Integer certificationCnt;
+    private Long certificationCnt;
     private Timestamp startDate;
     private Timestamp endDate;
+
+    @Builder
+    public Participation(Long challengeId, Long certificationCnt, Timestamp startDate, Timestamp endDate) {
+        this.challengeId = challengeId;
+        this.certificationCnt = certificationCnt;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     @Override
     public String toString(){

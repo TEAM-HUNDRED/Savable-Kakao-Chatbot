@@ -12,35 +12,33 @@ import java.sql.Timestamp;
 public class ChallengeSaveRequestDto {
 
     private String title;
-
-    private Long period;
-
+    private Long duration;
     private Timestamp startDate;
-
     private Timestamp endDate;
-
     private Long savedMoney;
-
     private Long reward;
+    private Long maxCnt;
 
     @Builder
-    public ChallengeSaveRequestDto(String title, Long period, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward) {
+    public ChallengeSaveRequestDto(String title, Long duration, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward, Long maxCnt) {
         this.title = title;
-        this.period = period;
+        this.duration = duration;
         this.startDate = startDate;
         this.endDate = endDate;
         this.savedMoney = savedMoney;
         this.reward = reward;
+        this.maxCnt = maxCnt;
     }
 
     public Challenge toEntity() {
         return Challenge.builder()
                 .title(title)
-                .period(period)
+                .duration(duration)
                 .startDate(startDate)
                 .endDate(endDate)
                 .savedMoney(savedMoney)
                 .reward(reward)
+                .maxCnt(maxCnt)
                 .build();
     }
 }
