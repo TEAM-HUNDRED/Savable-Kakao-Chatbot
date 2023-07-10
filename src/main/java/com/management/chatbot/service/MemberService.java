@@ -1,5 +1,6 @@
 package com.management.chatbot.service;
 
+import com.management.chatbot.Exception.ExistMemberException;
 import com.management.chatbot.Exception.MaxCertificationException;
 import com.management.chatbot.domain.CertInfo;
 import com.management.chatbot.domain.Member;
@@ -21,8 +22,12 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long save(MemberSaveRequestDto requestDto) {
-        return memberRepository.save(requestDto.toEntity()).getId();
+    public Long save(MemberSaveRequestDto memberSaveRequestDto) {
+        Member existMember = memberRepository.findByKakaoId(memberSaveRequestDto.getKakaoId());
+        if (existMember != null) {
+            throw new ExistMemberException(existMember.getUsername()+" 세이버님은 이미 가입되어 있습니다.\r\r챌린지에 참여하고 싶으신 경우 채팅방 하단 \"챌린지 목록\"을 클릭하고 \"챌린지 종류\"를 선택해주세요.");
+        }
+        return memberRepository.save(memberSaveRequestDto.toEntity()).getId();
     }
 
     @Transactional
