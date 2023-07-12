@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -113,7 +114,7 @@ public class Member {
             if (certification.getChallenge_id().equals(challengeId)){
                 long cnt = 0;
                 for (CertInfo certInfo: certification.getCert()){
-                    LocalDate currentDate = LocalDate.now();
+                    LocalDate currentDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
                     LocalDate dateFromTimestamp = certInfo.getDate().toLocalDateTime().toLocalDate();
                     if (currentDate.isEqual(dateFromTimestamp)){
                         cnt++;
