@@ -1,5 +1,6 @@
 package com.management.chatbot.service;
 
+import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.Exception.ExistMemberException;
 import com.management.chatbot.Exception.MaxCertificationException;
 import com.management.chatbot.domain.CertInfo;
@@ -39,6 +40,9 @@ public class MemberService {
     @Transactional
     public Long participate(String kakaoId, ParticipationSaveRequestDto participationSaveRequestDto) {
         Member member = memberRepository.findByKakaoId(kakaoId); //동일한 카카오 아이디를 가진 멤버 find
+        if (member == null){
+            throw new DefaultException("세이버님은 현재 Savable에 가입되지 않았습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료한 후에 챌린지 신청을 해주세요.");
+        }
         member.addParticipation(participationSaveRequestDto.toEntity()); // 멤버에 참여 정보 추가
 
         return member.getId();

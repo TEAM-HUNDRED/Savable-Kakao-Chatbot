@@ -1,5 +1,6 @@
 package com.management.chatbot.controller;
 
+import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.domain.Participation;
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
@@ -83,6 +84,10 @@ public class ParticipationController {
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
 
         MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId);
+        if (memberResponseDto.getParticipationList() == null){ // 참여중인 챌린지가 없는 경우
+            throw new DefaultException(memberResponseDto.getUsername() + " 세이버님은 현재 참여중인 챌린지가 없습니다.\r하단의 \"챌린지 목록\"을 누르고 \"챌린지 종류\" 버튼을 클릭해 원하는 챌린지에 신청한 후 인증해주세요😃");
+        }
+
         List<Participation> participationList = memberResponseDto.getParticipationList();
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
