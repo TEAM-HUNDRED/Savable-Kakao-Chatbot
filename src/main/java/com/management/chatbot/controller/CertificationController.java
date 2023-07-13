@@ -81,7 +81,7 @@ public class CertificationController {
         extra1.put("challenge_id", String.valueOf(challengeId));
         extra1.put("certification_image", certificationImage);
         ButtonDto buttonDto = ButtonDto.builder()
-                .label("예")
+                .label("잘 전송했어요☺️")
                 .action("block")
                 .blockId("64b042fa1be84973902bc014")
                 .extra(extra1)
@@ -91,7 +91,7 @@ public class CertificationController {
         HashMap<String, String> extra2 = new HashMap<>();
         extra1.put("challenge_id", String.valueOf(challengeId));
         ButtonDto buttonDto2 = ButtonDto.builder()
-                .label("아니오")
+                .label("잘못 전송했어요😥")
                 .action("block")
                 .blockId("64a6659d53ad9f7b8fa9887d")
                 .extra(extra2)
@@ -101,7 +101,7 @@ public class CertificationController {
         buttonDtoList.add(buttonDto2);
 
         BasicCard basicCardDto = BasicCard.builder()
-                .title("인증 사진을 잘 올리셨나요?\r잘 입력하셨다면 \"예\", 잘못 입력하셨다면 \"아니오\"를 눌러주세요😃")
+                .title("올바른 이미지를 전송했는지 확인해주세요😃")
                 .thumbnail(BasicCard.Thumbnail.builder()
                         .imageUrl(certificationImage)
                         .build())
