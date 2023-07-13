@@ -2,10 +2,7 @@ package com.management.chatbot.controller;
 
 import com.management.chatbot.service.FallbackLogService;
 import com.management.chatbot.service.MemberService;
-import com.management.chatbot.service.dto.FallbackLogSaveRequestDto;
-import com.management.chatbot.service.dto.KakaoRequestDto;
-import com.management.chatbot.service.dto.KakaoResponseDto;
-import com.management.chatbot.service.dto.MemberResponseDto;
+import com.management.chatbot.service.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +19,9 @@ public class FallbackLogController {
     private final MemberService memberService;
 
     @PostMapping("/fallback")
-    public HashMap<String, Object> fallback(@RequestBody KakaoRequestDto kakaoRequestDto) {
-        String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
-        String message = kakaoRequestDto.getUserRequest().getUtterance();
+    public HashMap<String, Object> fallback(@RequestBody KakaoImageRequestDto kakaoImageRequestDto) {
+        String kakaoId = kakaoImageRequestDto.getUserRequest().getUser().getId();
+        String message = kakaoImageRequestDto.getUserRequest().getUtterance();
         MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId);
 
         FallbackLogSaveRequestDto fallbackLogSaveRequestDto = FallbackLogSaveRequestDto.builder()
