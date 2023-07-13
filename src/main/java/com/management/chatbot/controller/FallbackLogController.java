@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.transform.sax.SAXResult;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
@@ -22,7 +23,7 @@ public class FallbackLogController {
     private final MemberService memberService;
 
     @PostMapping("/fallback")
-    public Long fallback(@RequestBody KakaoRequestDto kakaoRequestDto) {
+    public HashMap<String, Object> fallback(@RequestBody KakaoRequestDto kakaoRequestDto) {
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
         String message = kakaoRequestDto.getUserRequest().getUtterance();
         MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId);
@@ -34,6 +35,7 @@ public class FallbackLogController {
                 .sentTime(new Timestamp(System.currentTimeMillis()))
                 .build();
 
-        return fallbackLogService.save(fallbackLogSaveRequestDto);
+        fallbackLogService.save(fallbackLogSaveRequestDto);
+        return new KakaoResponseDto().makeResoonseDate();
     }
 }
