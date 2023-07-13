@@ -77,24 +77,24 @@ public class CertificationController {
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         // 예 버튼
-        HashMap<String, String> extra1 = new HashMap<>();
-        extra1.put("challenge_id", String.valueOf(challengeId));
-        extra1.put("certification_image", certificationImage);
+        HashMap<String, String> extraYes = new HashMap<>();
+        extraYes.put("challenge_id", String.valueOf(challengeId));
+        extraYes.put("certification_image", certificationImage);
         ButtonDto buttonDto = ButtonDto.builder()
                 .label("잘 전송했어요☺️")
                 .action("block")
                 .blockId("64b042fa1be84973902bc014")
-                .extra(extra1)
+                .extra(extraYes)
                 .build();
 
         // 아니오 버튼
-        HashMap<String, String> extra2 = new HashMap<>();
-        extra1.put("challenge_id", String.valueOf(challengeId));
+        HashMap<String, String> extraNo = new HashMap<>();
+        extraNo.put("challenge_id", String.valueOf(challengeId));
         ButtonDto buttonDto2 = ButtonDto.builder()
                 .label("잘못 전송했어요😥")
                 .action("block")
                 .blockId("64a6659d53ad9f7b8fa9887d")
-                .extra(extra2)
+                .extra(extraNo)
                 .build();
 
         buttonDtoList.add(buttonDto);
@@ -119,7 +119,7 @@ public class CertificationController {
     public HashMap<String, Object> certificationMessage(@RequestBody KakaoImageRequestDto kakaoRequestDto) {
 
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
-        String certificationImage = kakaoRequestDto.getAction().getParams().get("Certification_image");
+        String certificationImage = kakaoRequestDto.getAction().getClientExtra().get("certification_image");
         String challengeId = kakaoRequestDto.getAction().getClientExtra().get("challenge_id");
         String message = kakaoRequestDto.getAction().getParams().get("message");
 
