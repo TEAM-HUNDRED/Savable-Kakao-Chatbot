@@ -4,17 +4,23 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
+
 @Getter
 @NoArgsConstructor
 public class ButtonDto {
     private String action;
     private String label;
     private String messageText;
+    private String blockId;
+    private HashMap<String, String> extra;
 
     @Builder
-    public ButtonDto(String action, String label, String messageText) {
+    public ButtonDto(String action, String label, String messageText, String blockId, HashMap<String, String> extra) {
         this.action = action;
         this.label = label;
         this.messageText = messageText;
+        this.blockId = blockId;
+        this.extra = extra;
     }
 }

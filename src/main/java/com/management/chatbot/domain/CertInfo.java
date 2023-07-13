@@ -21,12 +21,14 @@ public class CertInfo implements Serializable{
     private Timestamp date;
     @Enumerated(EnumType.STRING)
     private CheckStatus check;
+    private String message;
 
     @Builder
-    public CertInfo(String image, Timestamp date, Boolean check) {
+    public CertInfo(String image, Timestamp date, Boolean check, String message) {
         this.image = image;
         this.date = date;
         this.check = CheckStatus.UNCHECKED;
+        this.message = message;
     }
 
     @Override
@@ -35,6 +37,7 @@ public class CertInfo implements Serializable{
                 "image=" + image +
                 ", date=" + date +
                 ", check=" + check +
+                ", message=" + message +
                 "}";
     }
 }

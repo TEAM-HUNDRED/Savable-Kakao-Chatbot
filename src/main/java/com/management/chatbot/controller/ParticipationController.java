@@ -96,10 +96,13 @@ public class ParticipationController {
             ChallengeResponseDto challengeResponseDto = challengeService.findById(challengeId);
 
             String challengeTitle= challengeResponseDto.getTitle();
+            HashMap<String, String> extra = new HashMap<>();
+            extra.put("Challenge_id", String.valueOf(challengeId));
             ButtonDto buttonDto = ButtonDto.builder()
                     .label(challengeTitle)
-                    .action("message")
-                    .messageText(challengeTitle)
+                    .action("block")
+                    .blockId("64a6659d53ad9f7b8fa9887d")
+                    .extra(extra)
                     .build();
             buttonDtoList.add(buttonDto);
         }
