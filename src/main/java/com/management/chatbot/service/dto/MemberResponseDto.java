@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 public class MemberResponseDto {
     private String username;
+    private String kakaoName;
     private String kakaoId;
     private Long savedMoney;
     private Long reward;
@@ -18,6 +19,7 @@ public class MemberResponseDto {
 
     public MemberResponseDto(Member entity) {
         this.username = entity.getUsername();
+        this.kakaoName = entity.getKakaoName();
         this.kakaoId = entity.getKakaoId();
         this.savedMoney = entity.getSavedMoney();
         this.reward = entity.getReward();

@@ -24,7 +24,7 @@ public class ChallengeService {
         return new ChallengeResponseDto(entity);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ChallengeResponseDto findByTitle(String title){
         Challenge entity = challengeRepository.findByTitle(title)
                 .orElseThrow(() -> new
