@@ -126,9 +126,6 @@ public class Member {
 
                 }
 
-                System.out.println(currentDate);
-                System.out.println(dateFromTimestamp);
-                System.out.println(Duration.between(dateFromTimestamp, currentDate).toHours());
                 if (cnt >= maxCnt) return true;
                 else if (Duration.between(dateFromTimestamp, currentDate).toHours() < 3) {
                     throw new DefaultException("동일한 챌린지의 경우 3시간 이내에는 인증을 연속으로 할 수 없습니다😓\r"
