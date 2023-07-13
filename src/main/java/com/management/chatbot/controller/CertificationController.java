@@ -1,17 +1,21 @@
 package com.management.chatbot.controller;
 
+import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.domain.Member;
+import com.management.chatbot.domain.Participation;
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
-import com.management.chatbot.service.dto.ChallengeResponseDto;
-import com.management.chatbot.service.dto.KakaoImageRequestDto;
-import com.management.chatbot.service.dto.KakaoResponseDto;
+import com.management.chatbot.service.dto.*;
+import com.management.chatbot.service.dto.KakaoDto.BasicCard;
+import com.management.chatbot.service.dto.KakaoDto.ButtonDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,25 +24,115 @@ public class CertificationController {
     private final ChallengeService challengeService;
     private final MemberService memberService;
 
-    @PostMapping("/certification")
-    public HashMap<String, Object> certification(@RequestBody KakaoImageRequestDto kakaoImageRequestDto) {
+    @PostMapping("/certification/menu") // 참여중인 챌린지 목록(인증 시 사용)
+    public HashMap<String, Object> certificationMenu(@RequestBody KakaoRequestDto kakaoRequestDto) {
+        String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
+
+        MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId);
+        if (memberResponseDto.getParticipationList() == null) { // 참여중인 챌린지가 없는 경우
+            throw new DefaultException(memberResponseDto.getUsername() + " 세이버님은 현재 참여중인 챌린지가 없습니다.\r하단의 \"챌린지 목록\"을 누르고 \"챌린지 종류\" 버튼을 클릭해 원하는 챌린지에 신청한 후 인증해주세요😃");
+        }
+
+        List<Participation> participationList = memberResponseDto.getParticipationList();
+
+        List<ButtonDto> buttonDtoList = new ArrayList<>();
+        for (Participation participation : participationList) {
+            Long challengeId = participation.getChallengeId();
+            ChallengeResponseDto challengeResponseDto = challengeService.findById(challengeId);
+
+            String challengeTitle = challengeResponseDto.getTitle();
+            HashMap<String, String> extra = new HashMap<>();
+            extra.put("challenge_id", String.valueOf(challengeId));
+            ButtonDto buttonDto = ButtonDto.builder()
+                    .label(challengeTitle)
+                    .action("block")
+                    .blockId("64a6659d53ad9f7b8fa9887d")
+                    .extra(extra)
+                    .build();
+            buttonDtoList.add(buttonDto);
+        }
+
+        BasicCard basicCardDto = BasicCard.builder()
+                .title("인증할 챌린지를 선택해주세요😃")
+                .thumbnail(BasicCard.Thumbnail.builder()
+                        .imageUrl("https://raw.githubusercontent.com/TEAM-HUNDRED/Savable-Kakao-Chatbot/6bc3a58b3f524c40a520e312e8395588e3a370e9/src/main/resources/static/images/cert-thumnail.jpg")
+                        .build())
+                .buttons(buttonDtoList)
+                .build();
+
+        List<HashMap<String, Object>> outputs = new ArrayList<>();
+        HashMap<String, Object> basicCard = new HashMap<>();
+        basicCard.put("basicCard", basicCardDto);
+        outputs.add(basicCard);
+        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+    }
+
+    @PostMapping("/certification/image")
+    public HashMap<String, Object> certificationImage(@RequestBody KakaoImageRequestDto kakaoImageRequestDto) {
         // 인증 정보
-        String kakaoId = kakaoImageRequestDto.getUserRequest().getUser().getId();
         String certificationImage = kakaoImageRequestDto.getAction().getParams().get("Certification_image");
-        String challengeTitle = kakaoImageRequestDto.getUserRequest().getUtterance();
+        String challengeId = kakaoImageRequestDto.getAction().getClientExtra().get("challenge_id");
+
+        HashMap<String, String> extra = new HashMap<>();
+        extra.put("challenge_id", String.valueOf(challengeId));
+        extra.put("certification_image", certificationImage);
+
+        List<ButtonDto> buttonDtoList = new ArrayList<>();
+        // 예 버튼
+        ButtonDto buttonDto = ButtonDto.builder()
+                .label("예")
+                .action("block")
+                .blockId("64b042fa1be84973902bc014")
+                .extra(extra)
+                .build();
+
+        // 아니오 버튼
+        ButtonDto buttonDto2 = ButtonDto.builder()
+                .label("아니오")
+                .action("block")
+                .blockId("64a668db53a2b70f48291802")
+                .build();
+
+        buttonDtoList.add(buttonDto);
+        buttonDtoList.add(buttonDto2);
+
+        BasicCard basicCardDto = BasicCard.builder()
+                .title("인증 사진이 맞으신가요?\r잘못 전송한 경우엔 다시 인증해주세요😃")
+                .thumbnail(BasicCard.Thumbnail.builder()
+                        .imageUrl(certificationImage)
+                        .build())
+                .buttons(buttonDtoList)
+                .build();
+
+        List<HashMap<String, Object>> outputs = new ArrayList<>();
+        HashMap<String, Object> basicCard = new HashMap<>();
+        basicCard.put("basicCard", basicCardDto);
+        outputs.add(basicCard);
+        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+    }
+
+    @PostMapping("/certification/message")
+    public HashMap<String, Object> certificationMessage(@RequestBody KakaoImageRequestDto kakaoRequestDto) {
+
+        String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
+        String certificationImage = kakaoRequestDto.getAction().getParams().get("Certification_image");
+        String challengeId = kakaoRequestDto.getAction().getClientExtra().get("challenge_id");
+        String message = kakaoRequestDto.getUserRequest().getUtterance();
 
         // 챌린지 정보
-        ChallengeResponseDto challengeResponseDto = challengeService.findByTitle(challengeTitle);
+        ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId));
 
         // 인증
-        Member member = memberService.certify(kakaoId, certificationImage, challengeResponseDto);
+        Member member = memberService.certify(kakaoId, certificationImage, message, challengeResponseDto);
 
-        String message = member.getUsername() + " 세이버님 안녕하세요\r"
+        String responseMessage = member.getUsername() + " 세이버님 안녕하세요\r"
                 + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r"
                 + "💸총 절약 금액: " + member.getSavedMoney() + "원(+" + challengeResponseDto.getSavedMoney() + "원)\r"
                 + "🎁총 세이버블 포인트: " + member.getReward() + "원(+" + challengeResponseDto.getReward() + "원)\r\r"
                 + "Savable과 함께 티끌 모으기! 앞으로도 함께 해요☺️\r\r"
                 + "(사진 조작 적발 시 인증이 반려될 수 있으며, 추후 패널티가 부과될 예정입니다.)";
-        return new KakaoResponseDto().makeResponseBody(message);
+
+
+        return new KakaoResponseDto().makeResponseBody(responseMessage);
     }
 }
