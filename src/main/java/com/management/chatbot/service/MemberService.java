@@ -68,9 +68,8 @@ public class MemberService {
 
         // 챌린지 최대 인증 횟수 초과 여부 확인
         if (member.isMaxCertification(challengeId, maxCnt)) {
-            String message = "하루에 최대 " + maxCnt + "번 인증할 수 있습니다😢\r"
-                    + "내일 다시 인증해주세요.";
-            throw new MaxCertificationException(message);
+            throw new DefaultException("하루에 최대 " + maxCnt + "번 인증할 수 있습니다😢\r"
+                    + "내일 다시 인증해주세요.");
         }
 
         member.addCertification(challengeId, certInfo, savedMoney, reward);
