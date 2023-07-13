@@ -2,6 +2,8 @@ package com.management.chatbot.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +19,16 @@ public class CertInfo implements Serializable{
     private String image;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "Asia/Seoul")
     private Timestamp date;
-    private Boolean check;
+    @Enumerated(EnumType.STRING)
+    private CheckStatus check;
+    private String message;
 
     @Builder
-    public CertInfo(String image, Timestamp date, Boolean check) {
+    public CertInfo(String image, Timestamp date, Boolean check, String message) {
         this.image = image;
         this.date = date;
-        this.check = check;
+        this.check = CheckStatus.UNCHECKED;
+        this.message = message;
     }
 
     @Override
@@ -32,6 +37,7 @@ public class CertInfo implements Serializable{
                 "image=" + image +
                 ", date=" + date +
                 ", check=" + check +
+                ", message=" + message +
                 "}";
     }
 }

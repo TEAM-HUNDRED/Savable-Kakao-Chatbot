@@ -34,6 +34,10 @@ public class MemberService {
     @Transactional
     public MemberResponseDto findByKakaoId(String kakaoId) {
         Member member = memberRepository.findByKakaoId(kakaoId);
+        if (member == null){
+            throw new DefaultException("세이버님은 현재 Savable에 가입되지 않았습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료한 후에 챌린지 신청을 해주세요.");
+        }
+
         return new MemberResponseDto(member);
     }
 
@@ -49,12 +53,13 @@ public class MemberService {
     }
 
     @Transactional
-    public Member certify(String kakaoId, String certificationImage, ChallengeResponseDto challengeResponseDto){
+    public Member certify(String kakaoId, String certificationImage, String message, ChallengeResponseDto challengeResponseDto){
         Member member = memberRepository.findByKakaoId(kakaoId); //동일한 카카오 아이디를 가진 멤버 find
         CertInfo certInfo = new CertInfo().builder()
                 .image(certificationImage)
                 .date(new Timestamp(System.currentTimeMillis()))
                 .check(null)
+                .message(message)
                 .build();
 
         Long challengeId = challengeResponseDto.getId();
@@ -64,9 +69,8 @@ public class MemberService {
 
         // 챌린지 최대 인증 횟수 초과 여부 확인
         if (member.isMaxCertification(challengeId, maxCnt)) {
-            String message = "하루에 최대 " + maxCnt + "번 인증할 수 있습니다😢\r"
-                    + "내일 다시 인증해주세요.";
-            throw new MaxCertificationException(message);
+            throw new DefaultException("하루에 최대 " + maxCnt + "번 인증할 수 있습니다😢\r"
+                    + "내일 다시 인증해주세요.");
         }
 
         member.addCertification(challengeId, certInfo, savedMoney, reward);

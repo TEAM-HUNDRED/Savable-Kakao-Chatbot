@@ -1,6 +1,7 @@
 package com.management.chatbot.domain;
 
 import com.management.chatbot.Exception.AlreadyJoinedException;
+import com.management.chatbot.Exception.DefaultException;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
@@ -10,7 +11,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -108,22 +112,28 @@ public class Member {
         if (this.certificationList == null) return false;
         ListIterator<Certification> iter = this.certificationList.listIterator();
 
+        LocalDateTime currentDate = LocalDateTime.now();
         while(iter.hasNext()){
             Certification certification = iter.next();
-            if (certification.getChallenge_id().equals(challengeId)){
+            if (certification.getChallenge_id().equals(challengeId)) {
                 long cnt = 0;
-                for (CertInfo certInfo: certification.getCert()){
-                    LocalDate currentDate = LocalDate.now();
-                    LocalDate dateFromTimestamp = certInfo.getDate().toLocalDateTime().toLocalDate();
-                    if (currentDate.isEqual(dateFromTimestamp)){
+                LocalDateTime dateFromTimestamp = null;
+                for (CertInfo certInfo : certification.getCert()) {
+                    dateFromTimestamp = certInfo.getDate().toLocalDateTime();
+                    if (Duration.between(dateFromTimestamp, currentDate).toDays() < 1) {
                         cnt++;
                     }
+
                 }
 
                 if (cnt >= maxCnt) return true;
-                else return false;
+                else if (Duration.between(dateFromTimestamp, currentDate).toHours() < 3) {
+                    throw new DefaultException("동일한 챌린지의 경우 3시간 이내에는 인증을 연속으로 할 수 없습니다😓\r"
+                    + "나중에 다시 인증 해주세요.");
+                } else return false;
             }
         }
+
         return false;
     }
 }

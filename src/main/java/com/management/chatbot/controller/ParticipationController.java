@@ -79,46 +79,6 @@ public class ParticipationController {
         return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
-    @PostMapping("/participation/menu") // 참여중인 챌린지 목록(인증 시 사용)
-    public HashMap<String, Object> participateChallengeTest(@RequestBody KakaoRequestDto kakaoRequestDto) {
-        String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
-
-        MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId);
-        if (memberResponseDto.getParticipationList() == null){ // 참여중인 챌린지가 없는 경우
-            throw new DefaultException(memberResponseDto.getUsername() + " 세이버님은 현재 참여중인 챌린지가 없습니다.\r하단의 \"챌린지 목록\"을 누르고 \"챌린지 종류\" 버튼을 클릭해 원하는 챌린지에 신청한 후 인증해주세요😃");
-        }
-
-        List<Participation> participationList = memberResponseDto.getParticipationList();
-
-        List<ButtonDto> buttonDtoList = new ArrayList<>();
-        for (Participation participation : participationList) {
-            Long challengeId = participation.getChallengeId();
-            ChallengeResponseDto challengeResponseDto = challengeService.findById(challengeId);
-
-            String challengeTitle= challengeResponseDto.getTitle();
-            ButtonDto buttonDto = ButtonDto.builder()
-                    .label(challengeTitle)
-                    .action("message")
-                    .messageText(challengeTitle)
-                    .build();
-            buttonDtoList.add(buttonDto);
-        }
-
-        BasicCard basicCardDto = BasicCard.builder()
-                .title("인증할 챌린지를 선택해주세요😃")
-                .thumbnail(BasicCard.Thumbnail.builder()
-                        .imageUrl("https://raw.githubusercontent.com/TEAM-HUNDRED/Savable-Kakao-Chatbot/6bc3a58b3f524c40a520e312e8395588e3a370e9/src/main/resources/static/images/cert-thumnail.jpg")
-                        .build())
-                .buttons(buttonDtoList)
-                .build();
-
-        List<HashMap<String, Object>> outputs = new ArrayList<>();
-        HashMap<String, Object> basicCard = new HashMap<>();
-        basicCard.put("basicCard", basicCardDto);
-        outputs.add(basicCard);
-        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
-    }
-
     @PostMapping("/status") // 챌린지 참여 현황
     public HashMap<String, Object> status(@RequestBody KakaoRequestDto kakaoRequestDto) {
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId(); // 유저의 카카오 아이디
