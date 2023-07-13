@@ -35,6 +35,9 @@ public class FallbackLogController {
                 .build();
 
         fallbackLogService.save(fallbackLogSaveRequestDto);
-        return new KakaoResponseDto().makeResoonseDate();
+        return new KakaoResponseDto().makeResponseBody("제가 이해할 수 없는 말이에요\uD83E\uDD16\n" +
+                "챗봇 사용법이 궁금하다면 채팅창에 \"챗봇 사용법\"을 입력해주세요✨\n" +
+                "\n" +
+                "▶\uFE0F 상담직원의 도움이 필요하다면, 좌측 하단 '+' 버튼을 누르고 '상담직원 연결' 버튼을 눌러 문의 사항을 입력해주세요⚡\uFE0F");
     }
 }
