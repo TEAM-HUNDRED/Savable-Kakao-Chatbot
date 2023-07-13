@@ -73,31 +73,35 @@ public class CertificationController {
         String certificationImage = kakaoImageRequestDto.getAction().getParams().get("Certification_image");
         String challengeId = kakaoImageRequestDto.getAction().getClientExtra().get("challenge_id");
 
-        HashMap<String, String> extra = new HashMap<>();
-        extra.put("challenge_id", String.valueOf(challengeId));
-        extra.put("certification_image", certificationImage);
+
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         // 예 버튼
+        HashMap<String, String> extra1 = new HashMap<>();
+        extra1.put("challenge_id", String.valueOf(challengeId));
+        extra1.put("certification_image", certificationImage);
         ButtonDto buttonDto = ButtonDto.builder()
                 .label("예")
                 .action("block")
                 .blockId("64b042fa1be84973902bc014")
-                .extra(extra)
+                .extra(extra1)
                 .build();
 
         // 아니오 버튼
+        HashMap<String, String> extra2 = new HashMap<>();
+        extra1.put("challenge_id", String.valueOf(challengeId));
         ButtonDto buttonDto2 = ButtonDto.builder()
                 .label("아니오")
                 .action("block")
-                .blockId("64a668db53a2b70f48291802")
+                .blockId("64a6659d53ad9f7b8fa9887d")
+                .extra(extra2)
                 .build();
 
         buttonDtoList.add(buttonDto);
         buttonDtoList.add(buttonDto2);
 
         BasicCard basicCardDto = BasicCard.builder()
-                .title("인증 사진이 맞으신가요?\r잘못 전송한 경우엔 다시 인증해주세요😃")
+                .title("인증 사진을 잘 올리셨나요?\r잘 입력하셨다면 \"예\", 잘못 입력하셨다면 \"아니오\"를 눌러주세요😃")
                 .thumbnail(BasicCard.Thumbnail.builder()
                         .imageUrl(certificationImage)
                         .build())
@@ -117,7 +121,7 @@ public class CertificationController {
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
         String certificationImage = kakaoRequestDto.getAction().getParams().get("Certification_image");
         String challengeId = kakaoRequestDto.getAction().getClientExtra().get("challenge_id");
-        String message = kakaoRequestDto.getUserRequest().getUtterance();
+        String message = kakaoRequestDto.getAction().getParams().get("message");
 
         // 챌린지 정보
         ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId));
