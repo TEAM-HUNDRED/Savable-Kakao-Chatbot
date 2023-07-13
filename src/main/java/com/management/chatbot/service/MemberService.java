@@ -34,6 +34,10 @@ public class MemberService {
     @Transactional
     public MemberResponseDto findByKakaoId(String kakaoId) {
         Member member = memberRepository.findByKakaoId(kakaoId);
+        if (member == null){
+            throw new DefaultException("세이버님은 현재 Savable에 가입되지 않았습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료한 후에 챌린지 신청을 해주세요.");
+        }
+
         return new MemberResponseDto(member);
     }
 
