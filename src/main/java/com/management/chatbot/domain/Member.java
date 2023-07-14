@@ -120,12 +120,14 @@ public class Member {
                 LocalDateTime dateFromTimestamp = null;
                 for (CertInfo certInfo : certification.getCert()) {
                     dateFromTimestamp = certInfo.getDate().toLocalDateTime();
-                    if (Duration.between(dateFromTimestamp, currentDate).toDays() < 1) {
+                    boolean isSameDate = dateFromTimestamp.toLocalDate().isEqual(currentDate.toLocalDate());
+                    if (isSameDate) {
+                        System.out.println(Duration.between(dateFromTimestamp, currentDate).toDays());
                         cnt++;
                     }
-
                 }
 
+                System.out.println("인증 횟수: " + cnt);
                 if (cnt >= maxCnt) return true;
                 else if (Duration.between(dateFromTimestamp, currentDate).toHours() < 3) {
                     throw new DefaultException("동일한 챌린지의 경우 3시간 이내에는 인증을 연속으로 할 수 없습니다😓\r"
