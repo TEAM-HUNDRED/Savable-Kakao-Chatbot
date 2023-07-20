@@ -16,6 +16,7 @@ public class MemberResponseDto {
     private Long savedMoney;
     private Long reward;
     private List<Participation> participationList;
+    private String phoneNumber;
 
     public MemberResponseDto(Member entity) {
         this.username = entity.getUsername();
@@ -24,5 +25,6 @@ public class MemberResponseDto {
         this.savedMoney = entity.getSavedMoney();
         this.reward = entity.getReward();
         this.participationList = entity.getParticipationList();
+        this.phoneNumber = entity.getPhoneNumber();
     }
 }

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class Member {
 
@@ -43,9 +43,10 @@ public class Member {
     private Long reward;
     private String kakaoId;
     private String kakaoName;
+    private String phoneNumber;
 
     @Builder
-    public Member(String username, List<Participation> participationList, List<Certification> certificationList, Long savedMoney, Long reward, String kakaoId, String kakaoName) {
+    public Member(String username, List<Participation> participationList, List<Certification> certificationList, Long savedMoney, Long reward, String kakaoId, String kakaoName, String phoneNumber) {
         this.username = username;
         this.participationList = participationList;
         this.certificationList = certificationList;
@@ -53,6 +54,7 @@ public class Member {
         this.reward = reward;
         this.kakaoId = kakaoId;
         this.kakaoName = kakaoName;
+        this.phoneNumber = phoneNumber;
     }
 
     public void addParticipation(Participation participation) {
@@ -137,5 +139,18 @@ public class Member {
         }
 
         return false;
+    }
+
+    public void buyGiftcard(Long price) {
+        if (this.reward < price) {
+            throw new DefaultException("잔액이 부족합니다.");
+        }
+        else {
+            this.reward -= price;
+        }
+    }
+
+    public void savePhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
