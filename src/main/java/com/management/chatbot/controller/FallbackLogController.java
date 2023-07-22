@@ -26,6 +26,16 @@ public class FallbackLogController {
         try {
             String image = kakaoImageRequestDto.getUserRequest().getParams().getMedia().getUrl();
         } catch (Exception e){
+            MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId);
+            FallbackLogSaveRequestDto fallbackLogSaveRequestDto = FallbackLogSaveRequestDto.builder()
+                    .username(memberResponseDto.getUsername())
+                    .kakaoName(memberResponseDto.getKakaoName())
+                    .message(message)
+                    .sentTime(new Timestamp(System.currentTimeMillis()))
+                    .build();
+
+            fallbackLogService.save(fallbackLogSaveRequestDto);
+
             throw new DefaultException("제가 이해할 수 없는 말이에요\uD83E\uDD16\n" +
                     "챗봇 사용법이 궁금하다면 채팅창에 \"챗봇 사용법\"을 입력해주세요✨\n" +
                     "\n" +
