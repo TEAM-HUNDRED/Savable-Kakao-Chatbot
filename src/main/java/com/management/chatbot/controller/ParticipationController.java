@@ -74,7 +74,7 @@ public class ParticipationController {
 
         // 신청하기 버튼
         HashMap<String, String> extra = new HashMap<>();
-        extra.put("challenge_id", String.valueOf(challengeId));
+        extra.put("Challenge_id", String.valueOf(challengeId));
         ButtonDto buttonDto2 = ButtonDto.builder()
                 .label("신청하기")
                 .action("block")
