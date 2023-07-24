@@ -34,7 +34,7 @@ public class MemberController {
 
         KakaoResponseDto kakaoResponseDto = new KakaoResponseDto();
 
-        return new KakaoResponseDto().makeResponseBody(username + " 세이버님 안녕하세요 :)\rSavable에 오신 것을 환영합니다.\n\n"
+        return new KakaoResponseDto().makeResponseBody("세이버 " + username + "님 안녕하세요 :)\rSavable에 오신 것을 환영합니다.\n\n"
                 + System.lineSeparator()
                 + "챌린지에 참여하고 싶다면 하단의 \"챌린지 종류\" 버튼을 눌러주세요☺️");
     }

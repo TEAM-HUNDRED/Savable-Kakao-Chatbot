@@ -73,8 +73,6 @@ public class CertificationController {
         String certificationImage = kakaoImageRequestDto.getAction().getParams().get("Certification_image");
         String challengeId = kakaoImageRequestDto.getAction().getClientExtra().get("challenge_id");
 
-
-
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         // 예 버튼
         HashMap<String, String> extraYes = new HashMap<>();
