@@ -30,7 +30,7 @@ public class CertificationController {
 
         MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId);
         if (memberResponseDto.getParticipationList() == null) { // 참여중인 챌린지가 없는 경우
-            throw new DefaultException(memberResponseDto.getUsername() + " 세이버님은 현재 참여중인 챌린지가 없습니다.\r하단의 \"챌린지 목록\"을 누르고 \"챌린지 종류\" 버튼을 클릭해 원하는 챌린지에 신청한 후 인증해주세요😃");
+            throw new DefaultException( "세이버 " + memberResponseDto.getUsername() + "님은 현재 참여중인 챌린지가 없습니다.\r하단의 \"챌린지 목록\"을 누르고 \"챌린지 종류\" 버튼을 클릭해 원하는 챌린지에 신청한 후 인증해주세요😃");
         }
 
         List<Participation> participationList = memberResponseDto.getParticipationList();
@@ -72,8 +72,6 @@ public class CertificationController {
         // 인증 정보
         String certificationImage = kakaoImageRequestDto.getAction().getParams().get("Certification_image");
         String challengeId = kakaoImageRequestDto.getAction().getClientExtra().get("challenge_id");
-
-
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         // 예 버튼

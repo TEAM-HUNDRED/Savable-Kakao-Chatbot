@@ -26,7 +26,7 @@ public class MemberService {
     public Long save(MemberSaveRequestDto memberSaveRequestDto) {
         Member existMember = memberRepository.findByKakaoId(memberSaveRequestDto.getKakaoId());
         if (existMember != null) {
-            throw new ExistMemberException(existMember.getUsername()+" 세이버님은 이미 가입되어 있습니다.\r\r챌린지에 참여하고 싶으신 경우 채팅방 하단 \"챌린지 목록\"을 클릭하고 \"챌린지 종류\"를 선택해주세요.");
+            throw new ExistMemberException( "세이버 " + existMember.getUsername()+"님은 이미 가입되어 있습니다.\r\r챌린지에 참여하고 싶으신 경우 채팅방 하단 \"챌린지 목록\"을 클릭하고 \"챌린지 종류\"를 선택해주세요🤖⚡️");
         }
         return memberRepository.save(memberSaveRequestDto.toEntity()).getId();
     }
@@ -35,7 +35,7 @@ public class MemberService {
     public MemberResponseDto findByKakaoId(String kakaoId) {
         Member member = memberRepository.findByKakaoId(kakaoId);
         if (member == null){
-            throw new DefaultException("세이버님은 현재 Savable에 가입되지 않았습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료한 후에 챌린지 신청을 해주세요.");
+            throw new DefaultException("세이버님은 현재 Savable에 가입되지 않았습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료한 후에 챌린지 신청을 해주세요🤖⚡");
         }
 
         return new MemberResponseDto(member);
@@ -45,7 +45,7 @@ public class MemberService {
     public Long participate(String kakaoId, ParticipationSaveRequestDto participationSaveRequestDto) {
         Member member = memberRepository.findByKakaoId(kakaoId); //동일한 카카오 아이디를 가진 멤버 find
         if (member == null){
-            throw new DefaultException("세이버님은 현재 Savable에 가입되지 않았습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료한 후에 챌린지 신청을 해주세요.");
+            throw new DefaultException("세이버님은 현재 Savable에 가입되지 않았습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료한 후에 챌린지 신청을 해주세요🤖⚡");
         }
         member.addParticipation(participationSaveRequestDto.toEntity()); // 멤버에 참여 정보 추가
 
