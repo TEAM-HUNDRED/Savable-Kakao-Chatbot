@@ -59,20 +59,22 @@ public class MemberJdbcRepository implements MemberRepository {
 
     @Override
     public List<MyRankingInfoDto> findRankingInfoList(){
-        String sql = "select\n" +
-                "  m.id,\n" +
+        String sql = "with rankingCert as(\n" +
+                "select\n" +
+                "  m.kakao_id,\n" +
                 "  m.username,\n" +
-                "  count(*) as certcnt,\n" +
-                "  RANK() OVER (ORDER BY count(*) DESC) AS ranking,\n" +
-                " saved_money,\n" +
-                " reward \n" +
+                "  cert_data->>'date' AS date,\n" +
+                "  cert_data->>'check' as check,\n" +
+                "  data_row ->> 'challenge_id' as c_id\n" +
                 "FROM \"member\" m ,\n" +
                 "     jsonb_array_elements(m.certification) AS data_row,\n" +
                 "     jsonb_array_elements(data_row->'cert') AS cert_data\n" +
-                "where CAST(cert_data ->> 'date' as date) >= current_date - 6\n" +
-                "group by m.id\n" +
-                "order by ranking, saved_money desc;";
-
+                "where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date\n" +
+                "and cert_data->>'check' = 'PASS')\n" +
+                "select r.username as username, sum(c.saved_money) as smoney, count(*) as cnt,\n" +
+                "rank() over (order by sum(c.saved_money) desc,  count(*) desc)\n" +
+                "from rankingCert r join challenge c on r.c_id::int = c.id\n" +
+                "group by r.username;";
         List<MyRankingInfoDto> certRankingList = template.query(sql, rankingRowMapper());
         return certRankingList;
     }
@@ -111,7 +113,7 @@ public class MemberJdbcRepository implements MemberRepository {
         return ((rs, rowNum) ->
                 MyRankingInfoDto.builder()
                         .username(rs.getString("username"))
-                        .certRank(rs.getInt("ranking"))
+                        .certRank(rs.getInt("rank"))
                         .build()
         );
     }
