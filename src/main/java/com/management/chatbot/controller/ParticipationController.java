@@ -5,7 +5,6 @@ import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.*;
 import com.management.chatbot.service.dto.KakaoDto.*;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,15 +32,15 @@ public class ParticipationController {
         List<HashMap<String, Object>> outputs = new ArrayList<>();
         HashMap<String, Object> carousel = new HashMap<>();
 
-        LocalDate targetDate = LocalDate.of(2023, 7, 24);
+        LocalDate targetDate = LocalDate.of(2023, 7, 25);
 
         // 가입 날짜 비교
-        if (timestamp.toLocalDateTime().toLocalDate().isEqual(targetDate)) {
-            // timestamp의 날짜가 7월 24일 이후인 경우
-            System.out.println("timestamp의 날짜가 7월 24일 같습니다.");
+        if (timestamp.toLocalDateTime().toLocalDate().isBefore(targetDate)) {
+            // timestamp의 날짜가 7월 24일인 경우
             basicCardList.add(makeItem(1L));
             basicCardList.add(makeItem(2L));
         } else {
+            // timestamp의 날짜가 7월 24일 이후인 경우
             basicCardList.add(makeItem(3L));
             basicCardList.add(makeItem(4L));
         }
@@ -93,8 +92,10 @@ public class ParticipationController {
                     .description("음료값 절약하고 기프티콘 받아가자")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
+                            .fixedRatio(true)
                             .build())
                     .buttons(buttonDtoList)
+                    .buttonLayout("horizontal")
                     .build();
         } else {
             basicCardDto = BasicCard.builder()
@@ -102,8 +103,10 @@ public class ParticipationController {
                     .description("배달비 절약하고 기프티콘 받아가자")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
+                            .fixedRatio(true)
                             .build())
                     .buttons(buttonDtoList)
+                    .buttonLayout("horizontal")
                     .build();
         }
 
