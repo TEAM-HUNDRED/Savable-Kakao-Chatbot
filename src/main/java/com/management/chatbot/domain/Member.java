@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,9 +45,10 @@ public class Member {
     private String kakaoId;
     private String kakaoName;
     private String phoneNumber;
+    private Timestamp createdAt;
 
     @Builder
-    public Member(String username, List<Participation> participationList, List<Certification> certificationList, Long savedMoney, Long reward, String kakaoId, String kakaoName, String phoneNumber) {
+    public Member(String username, List<Participation> participationList, List<Certification> certificationList, Long savedMoney, Long reward, String kakaoId, String kakaoName, String phoneNumber, Timestamp createdAt){
         this.username = username;
         this.participationList = participationList;
         this.certificationList = certificationList;
@@ -55,6 +57,7 @@ public class Member {
         this.kakaoId = kakaoId;
         this.kakaoName = kakaoName;
         this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
     }
 
     public void addParticipation(Participation participation) {
