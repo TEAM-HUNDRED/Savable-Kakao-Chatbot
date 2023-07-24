@@ -68,7 +68,7 @@ public class ParticipationController {
         // 메시지 3
         String certExamTitle = "▶️ " + challengeTitle + " 인증 방법\n첨부된 이미지를 참고하여 인증 사진을 보내주세요.\n\n매일 최대 2회 인증할 수 있으며, 1회 인증 마다 Savable 포인트 "
                 + challengeResponseDto.getReward()
-                +"원을 받아가실 수 있습니다🥰\n(인증 사진 조작 시 보상 지급이 불가능하며, 패널티가 부과될 수 있습니다.)";
+                +"원을 받아가실 수 있습니다🥰\nSavable 포인트를 이용해 추후 기프티콘 구매가 가능합니다.";
         SimpleTextDto simpleTextDto2 = SimpleTextDto.builder()
                 .text(certExamTitle)
                 .build();
@@ -85,7 +85,7 @@ public class ParticipationController {
         System.out.println(kakaoId);
 
         MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId); // 유저 정보
-        String message = memberResponseDto.getUsername() + " 세이버님의 현재 절약 현황입니다.\r"
+        String message = "세이버 " + memberResponseDto.getUsername() + "님의 현재 절약 현황입니다.\r"
                 + "💸총 절약 금액: " + memberResponseDto.getSavedMoney() + "원\r"
                 + "🎁총 세이버블 포인트: " + memberResponseDto.getReward() + "원";
         return new KakaoResponseDto().makeResponseBody(message);
