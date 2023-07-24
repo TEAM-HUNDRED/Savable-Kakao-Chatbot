@@ -18,6 +18,7 @@ public class ChallengeResponseDto {
     private Long reward;
     private String certExam;
     private Long maxCnt;
+    private String thumbnail;
 
     public ChallengeResponseDto(Challenge entity) {
         this.id = entity.getId();
@@ -29,5 +30,6 @@ public class ChallengeResponseDto {
         this.reward = entity.getReward();
         this.certExam = entity.getCertExam();
         this.maxCnt = entity.getMaxCnt();
+        this.thumbnail = entity.getThumbnail();
     }
 }

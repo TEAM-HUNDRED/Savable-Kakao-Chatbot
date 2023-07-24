@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -17,6 +18,7 @@ public class MemberResponseDto {
     private Long reward;
     private List<Participation> participationList;
     private String phoneNumber;
+    private Timestamp createdAt;
 
     public MemberResponseDto(Member entity) {
         this.username = entity.getUsername();
@@ -26,5 +28,6 @@ public class MemberResponseDto {
         this.reward = entity.getReward();
         this.participationList = entity.getParticipationList();
         this.phoneNumber = entity.getPhoneNumber();
+        this.createdAt = entity.getCreatedAt();
     }
 }

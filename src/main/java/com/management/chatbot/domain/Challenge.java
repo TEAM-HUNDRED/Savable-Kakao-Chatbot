@@ -28,9 +28,10 @@ public class Challenge {
     private Long reward;
     private String certExam;
     private Long maxCnt;
+    private String thumbnail;
 
     @Builder
-    public Challenge(String title, Long duration, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward, String certExam, Long maxCnt) {
+    public Challenge(String title, Long duration, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward, String certExam, Long maxCnt, String thumbnail) {
         this.title = title;
         this.duration = duration;
         this.startDate = startDate;
@@ -39,5 +40,6 @@ public class Challenge {
         this.reward = reward;
         this.certExam = certExam;
         this.maxCnt = maxCnt;
+        this.thumbnail = thumbnail;
     }
 }
