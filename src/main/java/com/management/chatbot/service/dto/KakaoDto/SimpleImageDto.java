@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 public class SimpleImageDto {
     private String imageUrl;
     private String altText;
+    private boolean fixedRatio;
 
     @Builder
-    public SimpleImageDto(String imageUrl, String altText) {
+    public SimpleImageDto(String imageUrl, String altText, boolean fixedRatio) {
         this.imageUrl = imageUrl;
         this.altText = altText;
+        this.fixedRatio = fixedRatio;
     }
 }

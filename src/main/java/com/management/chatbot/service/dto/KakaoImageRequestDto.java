@@ -31,15 +31,9 @@ public class KakaoImageRequestDto {
     @Getter
     public static class Extra {
         private Reason reason;
-
-        // 생성자, getter, setter 등 필요한 메소드를 추가해주세요.
-
-        // Reason 클래스
         public static class Reason {
             private int code;
             private String message;
-
-            // 생성자, getter, setter 등 필요한 메소드를 추가해주세요.
         }
     }
 
