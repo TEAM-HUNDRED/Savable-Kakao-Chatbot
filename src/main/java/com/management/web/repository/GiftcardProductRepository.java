@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface GiftcardRepository extends JpaRepository<GiftcardProduct, Long> {
+public interface GiftcardProductRepository extends JpaRepository<GiftcardProduct, Long> {
 
     List<GiftcardProduct> findBySaleYN(Boolean saleYN);
 
