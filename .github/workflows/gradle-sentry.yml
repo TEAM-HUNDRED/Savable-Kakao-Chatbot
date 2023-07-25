@@ -43,7 +43,7 @@ jobs:
 #          echo "${{ secrets.SENTRY_DSN }}" | base64 --decode > src/main/resources/application.yml
 #          find src
       - name: Set Sentry
-        run: echo ${{ secrets.APPLICATION }} >> ./src/main/resources/application.yml
+        run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
       # Gradle Build (test 제외)
       - name: Build with Gradle
         run: ./gradlew clean build --exclude-task test
