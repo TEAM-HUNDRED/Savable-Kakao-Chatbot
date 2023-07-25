@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GiftcardDto {
+public class GiftcardResponseDto {
 
     private Long id;
     private String name;
     private Long price;
     private String image;
 
-    public GiftcardDto(GiftcardProduct entity) {
+    public GiftcardResponseDto(GiftcardProduct entity) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.price = entity.getPrice();
