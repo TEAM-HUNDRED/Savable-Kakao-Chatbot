@@ -32,7 +32,7 @@ public class KakaoResponseDto {
         return resultJson;
     }
 
-    public HashMap<String ,Object> makeResoonseDate(HashMap<String, String> data){
+    public HashMap<String ,Object> makeResponseDate(HashMap<String, String> data){
         HashMap<String, Object> resultJson = new HashMap<>();
 
         resultJson.put("version", "2.0");
