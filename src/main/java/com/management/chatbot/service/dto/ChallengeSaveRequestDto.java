@@ -18,17 +18,7 @@ public class ChallengeSaveRequestDto {
     private Long savedMoney;
     private Long reward;
     private Long maxCnt;
-
-    @Builder
-    public ChallengeSaveRequestDto(String title, Long duration, Timestamp startDate, Timestamp endDate, Long savedMoney, Long reward, Long maxCnt) {
-        this.title = title;
-        this.duration = duration;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.savedMoney = savedMoney;
-        this.reward = reward;
-        this.maxCnt = maxCnt;
-    }
+    private String thumbnail;
 
     public Challenge toEntity() {
         return Challenge.builder()
@@ -39,6 +29,7 @@ public class ChallengeSaveRequestDto {
                 .savedMoney(savedMoney)
                 .reward(reward)
                 .maxCnt(maxCnt)
+                .thumbnail(thumbnail)
                 .build();
     }
 }

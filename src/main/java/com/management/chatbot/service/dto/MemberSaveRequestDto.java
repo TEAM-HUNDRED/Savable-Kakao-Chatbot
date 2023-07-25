@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Getter
 @NoArgsConstructor
 public class MemberSaveRequestDto {
@@ -12,6 +14,7 @@ public class MemberSaveRequestDto {
     private String kakaoId;
     private Long savedMoney;
     private Long reward;
+    private final Timestamp createdDate = new Timestamp(System.currentTimeMillis());
 
     @Builder
     public MemberSaveRequestDto(String username, String kakaoId, Long savedMoney, Long reward) {
@@ -27,6 +30,7 @@ public class MemberSaveRequestDto {
                 .kakaoId(kakaoId)
                 .savedMoney(savedMoney)
                 .reward(reward)
+                .createdAt(createdDate)
                 .build();
     }
 }
