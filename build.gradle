@@ -34,6 +34,9 @@ dependencies {
 	implementation 'org.slf4j:slf4j-api'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'org.apache.poi:poi:5.0.0'
+	//sentry
+	implementation 'io.sentry:sentry-spring-boot-starter-jakarta:6.25.0'
+	implementation 'io.sentry:sentry-logback:6.25.2'
 }
 
 tasks.named('test') {
@@ -41,3 +44,4 @@ tasks.named('test') {
 }
 
 jar { enabled = false }
+
