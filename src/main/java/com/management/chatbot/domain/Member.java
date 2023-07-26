@@ -156,4 +156,8 @@ public class Member {
     public void savePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public void updateReward(Long additionalReward) {
+        this.reward += additionalReward;
+    }
 }
