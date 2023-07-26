@@ -127,9 +127,9 @@ public class CertificationController {
         // 인증
         Member member = memberService.certify(kakaoId, certificationImage, message, challengeResponseDto);
 
-        String responseMessage = member.getUsername() + " 세이버님 안녕하세요\r"
-                + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r"
-                + "Savable과 함께 티끌 모으기! 앞으로도 함께 해요☺️\r\r"
+        String title = member.getUsername() + " 세이버님 안녕하세요\r"
+                + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r";
+        String description = "Savable과 함께 티끌 모으기! 앞으로도 함께 해요☺️\r\r"
                 + "하단의 '절약금액 확인하기' 버튼을 눌러 절약금액을 확인하세요😃";
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
@@ -142,9 +142,10 @@ public class CertificationController {
         buttonDtoList.add(buttonDto);
 
         BasicCard basicCardDto = BasicCard.builder()
-                .title(responseMessage)
+                .title(title)
+                .description(description)
                 .thumbnail(BasicCard.Thumbnail.builder()
-                        .imageUrl("https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/management/giftshop-chatbot-thumbnail.jpg")
+                        .imageUrl("https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/management/challenge-complete.jpg")
                         .build())
                 .buttons(buttonDtoList)
                 .build();
