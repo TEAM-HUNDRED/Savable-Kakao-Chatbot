@@ -7,8 +7,10 @@ import com.management.chatbot.web.dto.MyRankingInfoDto;
 
 import java.util.List;
 
-public interface MemberRepository {
-    MyPrivateRankingInfoDto findByKakaoId(String kakaoId);
+public interface MemberWebRepository {
+
+
+    MyPrivateRankingInfoDto findPrivateRnkingByKakaoId(String kakaoId);
 
     List<MyRankingInfoDto> findRankingInfoList();
 
