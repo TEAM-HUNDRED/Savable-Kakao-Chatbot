@@ -12,6 +12,7 @@ public class webConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://savable.net",
                         "https://savable.net",
+                        "http://localhost:3000",
                         "http://savable-content.s3-website.ap-northeast-2.amazonaws.com/")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true)
