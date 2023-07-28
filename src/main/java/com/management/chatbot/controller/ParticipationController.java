@@ -2,8 +2,11 @@ package com.management.chatbot.controller;
 
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
-import com.management.chatbot.service.dto.*;
+import com.management.chatbot.service.dto.ChallengeResponseDto;
+import com.management.chatbot.service.dto.KakaoBasicCardResponseDto;
 import com.management.chatbot.service.dto.KakaoDto.*;
+import com.management.chatbot.service.dto.MemberResponseDto;
+import com.management.chatbot.service.dto.ParticipationSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
