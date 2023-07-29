@@ -2,7 +2,6 @@ package com.management.chatbot.service;
 
 import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.Exception.ExistMemberException;
-import com.management.chatbot.Exception.MaxCertificationException;
 import com.management.chatbot.domain.CertInfo;
 import com.management.chatbot.domain.Member;
 import com.management.chatbot.repository.MemberRepository;
@@ -10,13 +9,15 @@ import com.management.chatbot.service.dto.ChallengeResponseDto;
 import com.management.chatbot.service.dto.MemberResponseDto;
 import com.management.chatbot.service.dto.MemberSaveRequestDto;
 import com.management.chatbot.service.dto.ParticipationSaveRequestDto;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -31,7 +32,6 @@ public class MemberService {
         return memberRepository.save(memberSaveRequestDto.toEntity()).getId();
     }
 
-    @Transactional
     public MemberResponseDto findByKakaoId(String kakaoId) {
         Member member = memberRepository.findByKakaoId(kakaoId);
         if (member == null){
@@ -75,5 +75,10 @@ public class MemberService {
 
         member.addCertification(challengeId, certInfo, savedMoney, reward);
         return member;
+    }
+
+    public List<ParticipationSaveRequestDto> findParticipatingChallenges(String kakaoId) {
+        Member member = memberRepository.findByKakaoId(kakaoId);
+        return member.getParticipatingChallenges();
     }
 }

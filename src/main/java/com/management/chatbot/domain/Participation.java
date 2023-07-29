@@ -19,13 +19,17 @@ public class Participation implements Serializable{
     private Timestamp startDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "Asia/Seoul")
     private Timestamp endDate;
+    private Long goalCnt;
+    private CheckStatus isSuccess; // 챌린지 성공 여부
 
     @Builder
-    public Participation(Long challengeId, Long certificationCnt, Timestamp startDate, Timestamp endDate) {
+    public Participation(Long challengeId, Long certificationCnt, Timestamp startDate, Timestamp endDate, Long goalCnt, CheckStatus isSuccess) {
         this.challengeId = challengeId;
         this.certificationCnt = certificationCnt;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.goalCnt = goalCnt;
+        this.isSuccess = isSuccess;
     }
 
     @Override
@@ -35,6 +39,8 @@ public class Participation implements Serializable{
                 ", certificationCnt=" + certificationCnt +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", goalCnt=" + goalCnt +
+                ", isSuccess=" + isSuccess +
                 "}";
     }
 }
