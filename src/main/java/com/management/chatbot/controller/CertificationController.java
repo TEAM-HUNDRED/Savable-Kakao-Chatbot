@@ -28,15 +28,10 @@ public class CertificationController {
     public HashMap<String, Object> certificationMenu(@RequestBody KakaoRequestDto kakaoRequestDto) {
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
 
-        MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId);
-        if (memberResponseDto.getParticipationList() == null) { // 참여중인 챌린지가 없는 경우
-            throw new DefaultException( "세이버 " + memberResponseDto.getUsername() + "님은 현재 참여중인 챌린지가 없습니다.\r하단의 \"챌린지 목록\"을 누르고 \"챌린지 종류\" 버튼을 클릭해 원하는 챌린지에 신청한 후 인증해주세요😃");
-        }
-
-        List<Participation> participationList = memberResponseDto.getParticipationList();
+        List<ParticipationSaveRequestDto> participationList = memberService.findParticipatingChallenges(kakaoId);
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
-        for (Participation participation : participationList) {
+        for (ParticipationSaveRequestDto participation : participationList) {
             Long challengeId = participation.getChallengeId();
             ChallengeResponseDto challengeResponseDto = challengeService.findById(challengeId);
 
