@@ -2,8 +2,11 @@ package com.management.chatbot.controller;
 
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
-import com.management.chatbot.service.dto.*;
+import com.management.chatbot.service.dto.ChallengeResponseDto;
+import com.management.chatbot.service.dto.KakaoBasicCardResponseDto;
 import com.management.chatbot.service.dto.KakaoDto.*;
+import com.management.chatbot.service.dto.MemberResponseDto;
+import com.management.chatbot.service.dto.ParticipationSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -168,13 +171,30 @@ public class ParticipationController {
 
     @PostMapping("/status") // 챌린지 참여 현황
     public HashMap<String, Object> status(@RequestBody KakaoRequestDto kakaoRequestDto) {
-        String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId(); // 유저의 카카오 아이디
-        System.out.println(kakaoId);
+        String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
+        memberService.findByKakaoId(kakaoId); // 해당 멤버가 존재하는지 확인
 
-        MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId); // 유저 정보
-        String message = "세이버 " + memberResponseDto.getUsername() + "님의 현재 절약 현황입니다.\r"
-                + "💸총 절약 금액: " + memberResponseDto.getSavedMoney() + "원\r"
-                + "🎁총 세이버블 포인트: " + memberResponseDto.getReward() + "원";
-        return new KakaoResponseDto().makeResponseBody(message);
+        List<ButtonDto> buttonDtoList = new ArrayList<>();
+        // 기프티콘 샵 url 버튼
+        ButtonDto buttonDto = ButtonDto.builder()
+                .label("챌린지 현황 보기")
+                .action("webLink")
+                .webLinkUrl("http://savable.net/challenge?kakaoId=" + kakaoId)
+                .build();
+        buttonDtoList.add(buttonDto);
+
+        BasicCard basicCardDto = BasicCard.builder()
+                .title("하단 버튼 클릭을 통해 세이버님의 챌린지 현황을 확인해보세요👀")
+                .thumbnail(BasicCard.Thumbnail.builder()
+                        .imageUrl("https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/management/challenge-status-thumbnail.jpg")
+                        .build())
+                .buttons(buttonDtoList)
+                .build();
+
+        List<HashMap<String, Object>> outputs = new ArrayList<>();
+        HashMap<String, Object> basicCard = new HashMap<>();
+        basicCard.put("basicCard", basicCardDto);
+        outputs.add(basicCard);
+        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 }

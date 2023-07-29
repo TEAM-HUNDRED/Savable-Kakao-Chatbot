@@ -127,14 +127,33 @@ public class CertificationController {
         // 인증
         Member member = memberService.certify(kakaoId, certificationImage, message, challengeResponseDto);
 
-        String responseMessage = member.getUsername() + " 세이버님 안녕하세요\r"
-                + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r"
-                + "💸총 절약 금액: " + member.getSavedMoney() + "원(+" + challengeResponseDto.getSavedMoney() + "원)\r"
-                + "🎁총 세이버블 포인트: " + member.getReward() + "원(+" + challengeResponseDto.getReward() + "원)\r\r"
-                + "Savable과 함께 티끌 모으기! 앞으로도 함께 해요☺️\r\r"
-                + "(사진 조작 적발 시 인증이 반려될 수 있으며, 추후 패널티가 부과될 예정입니다.)";
+        String title = member.getUsername() + " 세이버님 안녕하세요\r"
+                + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r";
+        String description = "Savable과 함께 티끌 모으기!\r 앞으로도 함께 해요☺️\r\r"
+                + " 하단의 '절약금액 확인하기' 버튼을 눌러 절약금액을 확인하세요😃";
 
+        List<ButtonDto> buttonDtoList = new ArrayList<>();
+        // 기프티콘 샵 url 버튼
+        ButtonDto buttonDto = ButtonDto.builder()
+                .label("절약금액 확인하기")
+                .action("webLink")
+                .webLinkUrl("http://savable.net/challenge?kakaoId=" + kakaoId)
+                .build();
+        buttonDtoList.add(buttonDto);
 
-        return new KakaoResponseDto().makeResponseBody(responseMessage);
+        BasicCard basicCardDto = BasicCard.builder()
+                .title(title)
+                .description(description)
+                .thumbnail(BasicCard.Thumbnail.builder()
+                        .imageUrl("https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/management/challenge-complete.jpg")
+                        .build())
+                .buttons(buttonDtoList)
+                .build();
+
+        List<HashMap<String, Object>> outputs = new ArrayList<>();
+        HashMap<String, Object> basicCard = new HashMap<>();
+        basicCard.put("basicCard", basicCardDto);
+        outputs.add(basicCard);
+        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 }

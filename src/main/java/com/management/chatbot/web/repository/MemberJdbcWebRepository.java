@@ -15,16 +15,16 @@ import java.util.List;
 
 @Slf4j
 @Repository
-public class MemberJdbcRepository implements MemberRepository {
+public class MemberJdbcWebRepository implements MemberWebRepository {
 
     private final JdbcTemplate template;
 
-    public MemberJdbcRepository(DataSource dataSource) {
+    public MemberJdbcWebRepository(DataSource dataSource) {
         this.template = new JdbcTemplate(dataSource);
     }
 
     @Override
-    public MyPrivateRankingInfoDto findByKakaoId(String kakaoId) {
+    public MyPrivateRankingInfoDto findPrivateRnkingByKakaoId(String kakaoId) {
         String sql = "with rankingCert as(\n" +
                 "select\n" +
                 "  m.kakao_id,\n" +
@@ -36,7 +36,7 @@ public class MemberJdbcRepository implements MemberRepository {
                 "     jsonb_array_elements(m.certification) AS data_row,\n" +
                 "     jsonb_array_elements(data_row->'cert') AS cert_data\n" +
                 "where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date\n" +
-                "and cert_data->>'check' = 'PASS'),\n" +
+                "and cert_data->>'check' != 'FAIL'),\n" +
                 "ranked_members as (select r.username as username,\n" +
                 "sum(c.saved_money) as smoney,\n" +
                 "count(*) as cnt,\n" +
@@ -69,7 +69,7 @@ public class MemberJdbcRepository implements MemberRepository {
                 "     jsonb_array_elements(m.certification) AS data_row,\n" +
                 "     jsonb_array_elements(data_row->'cert') AS cert_data\n" +
                 "where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date\n" +
-                "and cert_data->>'check' = 'PASS'),\n" +
+                "and cert_data->>'check' != 'FAIL'),\n" +
                 "rankingResult as (\n" +
                 "select \n" +
                 "\tr.username as username,\n" +
@@ -112,11 +112,11 @@ public class MemberJdbcRepository implements MemberRepository {
                 "     jsonb_array_elements(m.certification) AS data_row,\n" +
                 "     jsonb_array_elements(data_row->'cert') AS cert_data\n" +
                 "where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date\n" +
-                "and cert_data->>'check' = 'PASS')\n" +
-                "select r.username as username, sum(c.saved_money) as smoney, count(*) as cnt,\n" +
+                "and cert_data->>'check' != 'FAIL')\n" +
+                "select r.username as username, r.kakao_id as kakaoId, sum(c.saved_money) as smoney, count(*) as cnt,\n" +
                 "rank() over (order by sum(c.saved_money) desc,  count(*) desc)\n" +
                 "from rankingCert r join challenge c on r.c_id::int = c.id\n" +
-                "group by r.username;";
+                "group by r.username, r.kakao_id;";
         List<MyRankingInfoDto> certRankingList = template.query(sql, rankingRowMapper());
         return certRankingList;
     }
@@ -132,7 +132,7 @@ public class MemberJdbcRepository implements MemberRepository {
                 "FROM \"member\" m ,\n" +
                 "     jsonb_array_elements(m.certification) AS data_row,\n" +
                 "     jsonb_array_elements(data_row->'cert') AS cert_data\n" +
-                "where cert_data->>'check' = 'PASS' and m.kakao_id =?\n" +
+                "where cert_data->>'check' != 'FAIL' and m.kakao_id =?\n" +
                 "group by m.kakao_id,c_id,m.username)\n" +
                 "select chall.kakao_id, c2.title,chall.username,\n" +
                 "c2.saved_money*chall.cnt as saved_money,\n" +
@@ -156,6 +156,7 @@ public class MemberJdbcRepository implements MemberRepository {
                 MyRankingInfoDto.builder()
                         .username(rs.getString("username"))
                         .certRank(rs.getInt("rank"))
+                        .kakaoId(rs.getString("kakaoId"))
                         .build()
         );
     }
