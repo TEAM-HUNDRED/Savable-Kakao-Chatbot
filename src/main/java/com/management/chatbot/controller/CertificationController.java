@@ -129,8 +129,8 @@ public class CertificationController {
 
         String title = member.getUsername() + " 세이버님 안녕하세요\r"
                 + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r";
-        String description = "Savable과 함께 티끌 모으기! 앞으로도 함께 해요☺️\r\r"
-                + "하단의 '절약금액 확인하기' 버튼을 눌러 절약금액을 확인하세요😃";
+        String description = "Savable과 함께 티끌 모으기!\r 앞으로도 함께 해요☺️\r\r"
+                + " 하단의 '절약금액 확인하기' 버튼을 눌러 절약금액을 확인하세요😃";
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         // 기프티콘 샵 url 버튼
