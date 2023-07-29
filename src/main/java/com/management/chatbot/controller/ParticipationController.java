@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -98,7 +99,8 @@ public class ParticipationController {
         if (challengeResponseDto.getTitle().equals("음료값 절약 챌린지")){
             basicCardDto = BasicCard.builder()
                     .title("음료값 절약 챌린지☕️")
-                    .description("음료값 절약하고 티끌 모아 태산 실천하자!")
+                    .description("음료값 절약하고 티끌 모아 태산 실천하자!\n" +
+                            " (챌린지 진행 기간: 7일)")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
                             .fixedRatio(true)
@@ -108,8 +110,9 @@ public class ParticipationController {
                     .build();
         } else if (challengeResponseDto.getTitle().equals("집밥 먹기 절약 챌린지")) {
             basicCardDto = BasicCard.builder()
-                    .title("집밥 먹기 절약 챌린지🍔️")
-                    .description("집밥 먹고 절약해서 티끌 모아 태산 실천하자!")
+                    .title("집밥 먹기 절약 챌린지🍚")
+                    .description("집밥 먹고 절약해서 티끌 모아 태산 실천하자!\n" +
+                            " (챌린지 진행 기간: 7일)")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
                             .fixedRatio(true)
@@ -120,7 +123,8 @@ public class ParticipationController {
         } else {
             basicCardDto = BasicCard.builder()
                     .title("배달비 절약 챌린지🍔️")
-                    .description("배달비 절약하고 티끌 모아 태산 실천하자!")
+                    .description("배달비 절약하고 티끌 모아 태산 실천하자!\n" +
+                            " (챌린지 진행 기간: 7일)")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
                             .fixedRatio(true)
@@ -140,11 +144,13 @@ public class ParticipationController {
         ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId)); // 챌린지 정보
 
         String goalCnt = kakaoRequestDto.getAction().getDetailParams().get("min_goal").getOrigin(); // 최소 인증 목표 횟수
+        Timestamp endDate = calculateEndDate(challengeResponseDto.getDuration()); // 챌린지 종료일 계산
+
         ParticipationSaveRequestDto participationSaveRequestDto = ParticipationSaveRequestDto.builder()
                 .challengeId(Long.parseLong(challengeId))
                 .certificationCnt(0L)
                 .startDate(new Timestamp(System.currentTimeMillis()))
-                .endDate(calculateEndDate(challengeResponseDto.getDuration()))
+                .endDate(endDate)
                 .goalCnt(Long.parseLong(goalCnt))
                 .isSuccess(CheckStatus.FAIL)
                 .build();
@@ -159,8 +165,12 @@ public class ParticipationController {
         HashMap<String, Object> simpleImage = new HashMap<>();
 
         // 메시지 1
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+        String formattedDate = sdf.format(endDate);
+
         String participateText = challengeTitle + " 신청이 완료되었습니다.\n" +
-                "챌린지 기간 동안 최소 " + goalCnt + "회 이상 인증할 경우 🎉절약 챌린지 성공🎉으로 인정됩니다\n" +
+                "7일 동안(" + formattedDate + "까지) 최소 " + goalCnt + "회 이상 인증할 경우 🎉절약 챌린지 성공🎉으로 인정됩니다!\n\n" +
+                "최소 " + goalCnt + "회 이상 인증할 경우 🎉절약 챌린지 성공🎉으로 인정됩니다!\n\n" +
                 "앞으로 Savable과 함께 열심히 절약해 나가요🔥";
         SimpleTextDto simpleTextDto1 = SimpleTextDto.builder()
                 .text(participateText)
@@ -179,11 +189,12 @@ public class ParticipationController {
         outputs.add(simpleImage);
 
         // 메시지 3
-        String certExamTitle = "[" + challengeTitle + " 인증 방법]\n" +
-                "첨부된 이미지를 참고하여 인증 사진을 보내주세요.\n\n최대 인증 횟수는 제한이 없으며, 1회 인증 마다 Savable 포인트 "+
+        String certExamTitle = "💌" + challengeTitle + " 인증 방법💌\n" +
+                "위 이미지를 참고해 인증 사진을 보내주세요.\n\n최대 인증 횟수는 제한이 없으며, 1회 인증 마다 Savable 포인트 "+
                 challengeResponseDto.getReward()+
-                "원을 받아가실 수 있습니다🥰\n" +
-                "Savable 포인트를 이용해 추후 기프티콘 구매가 가능합니다.";
+                "원을 드립니다🥰\n" +
+                "\n\n" +
+                "Savable 포인트로 추후 기프티콘 구매가 가능합니다.";
         SimpleTextDto simpleTextDto2 = SimpleTextDto.builder()
                 .text(certExamTitle)
                 .build();
@@ -196,7 +207,7 @@ public class ParticipationController {
 
     public Timestamp calculateEndDate(Long duration){
         // endDate 계산
-        LocalDateTime currentLocalDateTime = LocalDateTime.now();
+        LocalDateTime currentLocalDateTime = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(59);
         LocalDateTime newLocalDateTime = currentLocalDateTime.plusDays(duration);
         return Timestamp.valueOf(newLocalDateTime);
     }
