@@ -101,7 +101,7 @@ public class MemberController {
         ButtonDto buttonDto = ButtonDto.builder()
                 .label("기프티콘 구매하기")
                 .action("webLink")
-                .webLinkUrl("http://savable.net/shop/" + kakaoId)
+                .webLinkUrl("http://savable.net/savable_shop?kakaoId=" + kakaoId)
                 .build();
         buttonDtoList.add(buttonDto);
 
