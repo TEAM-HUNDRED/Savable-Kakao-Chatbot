@@ -169,7 +169,7 @@ public class ParticipationController {
         String formattedDate = sdf.format(endDate);
 
         String participateText = challengeTitle + " 신청이 완료되었습니다.\n" +
-                "7일 동안(" + formattedDate + "까지) 최소 " + goalCnt + "회 이상 인증할 경우 🎉절약 챌린지 성공🎉으로 인정됩니다!\n\n" +
+                "7일 동안(" + formattedDate + "까지)" +
                 "최소 " + goalCnt + "회 이상 인증할 경우 🎉절약 챌린지 성공🎉으로 인정됩니다!\n\n" +
                 "앞으로 Savable과 함께 열심히 절약해 나가요🔥";
         SimpleTextDto simpleTextDto1 = SimpleTextDto.builder()
