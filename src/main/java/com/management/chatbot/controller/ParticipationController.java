@@ -165,7 +165,7 @@ public class ParticipationController {
         HashMap<String, Object> simpleImage = new HashMap<>();
 
         // 메시지 1
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("M/d");
         String formattedDate = sdf.format(endDate);
 
         String participateText = challengeTitle + " 신청이 완료되었습니다.\n" +
