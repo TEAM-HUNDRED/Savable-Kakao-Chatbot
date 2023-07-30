@@ -192,8 +192,7 @@ public class ParticipationController {
         String certExamTitle = "💌" + challengeTitle + " 인증 방법💌\n" +
                 "위 이미지를 참고해 인증 사진을 보내주세요.\n\n최대 인증 횟수는 제한이 없으며, 1회 인증 마다 Savable 포인트 "+
                 challengeResponseDto.getReward()+
-                "원을 드립니다🥰\n" +
-                "\n\n" +
+                "원을 드립니다🥰\n\n" +
                 "Savable 포인트로 추후 기프티콘 구매가 가능합니다.";
         SimpleTextDto simpleTextDto2 = SimpleTextDto.builder()
                 .text(certExamTitle)
