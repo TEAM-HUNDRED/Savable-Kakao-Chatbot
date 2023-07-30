@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +37,12 @@ public class CertificationController {
             String challengeTitle = challengeResponseDto.getTitle();
             HashMap<String, String> extra = new HashMap<>();
             extra.put("challenge_id", String.valueOf(challengeId));
+
+            SimpleDateFormat sdf = new SimpleDateFormat("M/d");
+            String formattedDate = sdf.format(participation.getEndDate());
+
             ButtonDto buttonDto = ButtonDto.builder()
-                    .label(challengeTitle)
+                    .label(challengeTitle + "(~" + formattedDate + ")")
                     .action("block")
                     .blockId("64a6659d53ad9f7b8fa9887d")
                     .extra(extra)

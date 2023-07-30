@@ -51,7 +51,6 @@ public class Participation implements Serializable{
 
         // 챌린지 성공으로 isSuccess 값을 변경
         if(this.certificationCnt == this.goalCnt){
-            System.out.println("챌린지 성공");
             this.isSuccess = CheckStatus.PASS;
         }
         return new ParticipationSaveRequestDto(this);
