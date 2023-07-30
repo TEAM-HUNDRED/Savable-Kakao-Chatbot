@@ -34,7 +34,7 @@ public class CertificationController {
             Long challengeId = participation.getChallengeId();
             ChallengeResponseDto challengeResponseDto = challengeService.findById(challengeId);
 
-            String challengeTitle = challengeResponseDto.getTitle();
+            String challengeTitle = challengeResponseDto.getTitle().replace(" 절약 챌린지", "");
             HashMap<String, String> extra = new HashMap<>();
             extra.put("challenge_id", String.valueOf(challengeId));
 
@@ -140,18 +140,18 @@ public class CertificationController {
                     "번❗️ 더 절약해야 해요\uD83D\uDE24\n" +
                     "부자되는 그 날까지 파이팅 \uD83D\uDCB8\uD83E\uDD0D";
         } else if (certificationCnt == goalCnt) {
-            simpleTextMessage += "커피값 절약 챌린지 성공을 축하합니다\uD83D\uDC4F\uD83C\uDFFB\uD83D\uDC4F\uD83C\uDFFB\uD83D\uDC4F\uD83C\uDFFB\n\n" +
-                    "세이버 " + member.getUsername() + "님의 절약을 위한 노력으로 " +
+            simpleTextMessage += "커피값 절약 챌린지 성공을 축하합니다👏🏻👏🏻\n\n" +
+                    "절약을 위한 노력으로 총 " +
                     challengeResponseDto.getSavedMoney() * goalCnt + "원을 아낄 수 있었어요!\n" +
                     "부자에 한 발짝 가까워진 거 같지 않나요..?\uD83D\uDE01\n" +
                     "\n" +
                     "지금까지의 노력은 더 나은 미래를 위한 중요한 시작입니다!\n" +
-                    "앞으로도 지속적인 절약을 통해 더 큰 성취를 이루시길 바라요\uD83E\uDD70\n" +
+                    "앞으로도 지속적인 절약을 통해 더 큰 성취를 이루시길 바라요\uD83E\uDD70\n\n" +
                     "(챌린지 기간이 끝날 때까지 계속 인증할 수 있습니다)";
         } else {
-            simpleTextMessage += "WOW! 인증 횟수가 목표 횟수를 뛰어 넘었어요!\n" +
-                    "세이버 " + member.getUsername() + "님의 놀라운 노력에 박수를 보냅니다\uD83D\uDC4F\uD83C\uDFFB\uD83D\uDC4F\uD83C\uDFFB\n\n" +
-                    "자금을 적절히 관리하여 목표를 향해 꾸준히 나아가세요! \uD83D\uDCAA\uD83C\uDF1F";
+            simpleTextMessage += "WOW!\n인증 횟수가 목표 횟수를 뛰어 넘었어요!\n" +
+                    "세이버님의 놀라운 노력에 박수를 보냅니다\uD83D\uDC4F\uD83C\uDFFB\uD83D\uDC4F\uD83C\uDFFB\n\n" +
+                    "자금을 적절히 관리하여 목표를 향해 꾸준히 나아가세요!";
         }
 
         SimpleTextDto simpleTextDto = SimpleTextDto.builder()
