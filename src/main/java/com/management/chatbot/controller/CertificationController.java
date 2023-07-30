@@ -129,16 +129,16 @@ public class CertificationController {
         Long certificationCnt = participationSaveRequestDto.getCertificationCnt();
         Long goalCnt = participationSaveRequestDto.getGoalCnt();
         String simpleTextMessage = "음료값 절약 챌린지 인증이 완료되었습니다\uD83C\uDF89\n\n" +
-                "\uD83D\uDD25세이버 다영님의 챌린지 현황\uD83D\uDD25\u2028\n" +
+                "🔥세이버 " + member.getUsername()  +"님의 챌린지 현황🔥\n" +
                 "- 총 인증 횟수: " + certificationCnt + "회\n" +
-                "\n- 목표 인증 횟수: " + goalCnt + "회\n" +
+                "- 목표 인증 횟수: " + goalCnt + "회\n" +
                 "——————————————\n";
 
         if (certificationCnt < goalCnt) {
             simpleTextMessage += "챌린지 성공을 위해 " +
-                    "앞으로 " + (goalCnt - certificationCnt) +
-                    "번 더 절약해야 해요\uD83D\uDE24\n" +
-                    "부자되는 그 날까지 파이팅 !! \uD83D\uDCB8\uD83E\uDD0D";
+                    "앞으로 ❗️" + (goalCnt - certificationCnt) +
+                    "번❗️ 더 절약해야 해요\uD83D\uDE24\n" +
+                    "부자되는 그 날까지 파이팅 \uD83D\uDCB8\uD83E\uDD0D";
         } else if (certificationCnt == goalCnt) {
             simpleTextMessage += "커피값 절약 챌린지 성공을 축하합니다\uD83D\uDC4F\uD83C\uDFFB\uD83D\uDC4F\uD83C\uDFFB\uD83D\uDC4F\uD83C\uDFFB\n\n" +
                     "세이버 " + member.getUsername() + "님의 절약을 위한 노력으로 " +
