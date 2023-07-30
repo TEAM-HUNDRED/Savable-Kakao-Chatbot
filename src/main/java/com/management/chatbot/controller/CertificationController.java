@@ -1,13 +1,11 @@
 package com.management.chatbot.controller;
 
-import com.management.chatbot.Exception.DefaultException;
-import com.management.chatbot.domain.Member;
-import com.management.chatbot.domain.Participation;
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.*;
 import com.management.chatbot.service.dto.KakaoDto.BasicCard;
 import com.management.chatbot.service.dto.KakaoDto.ButtonDto;
+import com.management.chatbot.service.dto.KakaoDto.SimpleTextDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -116,19 +114,50 @@ public class CertificationController {
         String challengeId = kakaoRequestDto.getAction().getClientExtra().get("challenge_id");
         String message = kakaoRequestDto.getAction().getParams().get("message");
 
-        // 챌린지 정보
+        MemberResponseDto member = memberService.findByKakaoId(kakaoId);
         ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId));
 
         // 인증
-        Member member = memberService.certify(kakaoId, certificationImage, message, challengeResponseDto);
+        ParticipationSaveRequestDto participationSaveRequestDto = memberService.certify(kakaoId, certificationImage, message, challengeResponseDto);
 
-        String title = member.getUsername() + " 세이버님 안녕하세요\r"
-                + challengeResponseDto.getTitle() + " 인증이 완료되었습니다🎉\r\r";
-        String description = "Savable과 함께 티끌 모으기!\r 앞으로도 함께 해요☺️\r\r"
-                + " 하단의 '절약금액 확인하기' 버튼을 눌러 절약금액을 확인하세요😃";
+        //메시지 1
+        Long certificationCnt = participationSaveRequestDto.getCertificationCnt();
+        Long goalCnt = participationSaveRequestDto.getGoalCnt();
+        String simpleTextMessage = "음료값 절약 챌린지 인증이 완료되었습니다\uD83C\uDF89\n\n" +
+                "\uD83D\uDD25세이버 다영님의 챌린지 현황\uD83D\uDD25\u2028\n" +
+                "- 총 인증 횟수: " + certificationCnt + "회\n" +
+                "\n- 목표 인증 횟수: " + goalCnt + "회\n" +
+                "——————————————\n";
+
+        if (certificationCnt < goalCnt) {
+            simpleTextMessage += "챌린지 성공을 위해 " +
+                    "앞으로 " + (goalCnt - certificationCnt) +
+                    "번 더 절약해야 해요\uD83D\uDE24\n" +
+                    "부자되는 그 날까지 파이팅 !! \uD83D\uDCB8\uD83E\uDD0D";
+        } else if (certificationCnt == goalCnt) {
+            simpleTextMessage += "커피값 절약 챌린지 성공을 축하합니다\uD83D\uDC4F\uD83C\uDFFB\uD83D\uDC4F\uD83C\uDFFB\uD83D\uDC4F\uD83C\uDFFB\n\n" +
+                    "세이버 " + member.getUsername() + "님의 절약을 위한 노력으로 " +
+                    challengeResponseDto.getSavedMoney() * goalCnt + "원을 아낄 수 있었어요!\n" +
+                    "부자에 한 발짝 가까워진 거 같지 않나요..?\uD83D\uDE01\n" +
+                    "\n" +
+                    "지금까지의 노력은 더 나은 미래를 위한 중요한 시작입니다!\n" +
+                    "앞으로도 지속적인 절약을 통해 더 큰 성취를 이루시길 바라요\uD83E\uDD70\n" +
+                    "(챌린지 기간이 끝날 때까지 계속 인증할 수 있습니다)";
+        } else {
+            simpleTextMessage += "WOW! 인증 횟수가 목표 횟수를 뛰어 넘었어요!\n" +
+                    "세이버 " + member.getUsername() + "님의 놀라운 노력에 박수를 보냅니다\uD83D\uDC4F\uD83C\uDFFB\uD83D\uDC4F\uD83C\uDFFB\n\n" +
+                    "자금을 적절히 관리하여 목표를 향해 꾸준히 나아가세요! \uD83D\uDCAA\uD83C\uDF1F";
+        }
+
+        SimpleTextDto simpleTextDto = SimpleTextDto.builder()
+                .text(simpleTextMessage)
+                .build();
+
+        // 메시지 2
+        String title = "하단의 '절약금액 확인하기' 버튼을 눌러 절약금액을 확인하세요😃";
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
-        // 기프티콘 샵 url 버튼
+        // 절약 현황 url 버튼
         ButtonDto buttonDto = ButtonDto.builder()
                 .label("절약금액 확인하기")
                 .action("webLink")
@@ -138,7 +167,6 @@ public class CertificationController {
 
         BasicCard basicCardDto = BasicCard.builder()
                 .title(title)
-                .description(description)
                 .thumbnail(BasicCard.Thumbnail.builder()
                         .imageUrl("https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/management/challenge-complete.jpg")
                         .build())
@@ -146,9 +174,15 @@ public class CertificationController {
                 .build();
 
         List<HashMap<String, Object>> outputs = new ArrayList<>();
+        HashMap<String, Object> simpleText = new HashMap<>();
         HashMap<String, Object> basicCard = new HashMap<>();
+
+        simpleText.put("simpleText", simpleTextDto);
+        outputs.add(simpleText);
+
         basicCard.put("basicCard", basicCardDto);
         outputs.add(basicCard);
+
         return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 }

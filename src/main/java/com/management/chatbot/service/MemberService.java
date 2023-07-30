@@ -4,6 +4,7 @@ import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.Exception.ExistMemberException;
 import com.management.chatbot.domain.CertInfo;
 import com.management.chatbot.domain.Member;
+import com.management.chatbot.domain.Participation;
 import com.management.chatbot.repository.MemberRepository;
 import com.management.chatbot.service.dto.ChallengeResponseDto;
 import com.management.chatbot.service.dto.MemberResponseDto;
@@ -53,8 +54,9 @@ public class MemberService {
     }
 
     @Transactional
-    public Member certify(String kakaoId, String certificationImage, String message, ChallengeResponseDto challengeResponseDto){
+    public ParticipationSaveRequestDto certify(String kakaoId, String certificationImage, String message, ChallengeResponseDto challengeResponseDto){
         Member member = memberRepository.findByKakaoId(kakaoId); //동일한 카카오 아이디를 가진 멤버 find
+
         CertInfo certInfo = new CertInfo().builder()
                 .image(certificationImage)
                 .date(new Timestamp(System.currentTimeMillis()))
@@ -73,8 +75,8 @@ public class MemberService {
                     + "내일 다시 인증해주세요.");
         }
 
-        member.addCertification(challengeId, certInfo, savedMoney, reward);
-        return member;
+        ParticipationSaveRequestDto participation = member.addCertification(challengeId, certInfo, savedMoney, reward);
+        return participation;
     }
 
     public List<ParticipationSaveRequestDto> findParticipatingChallenges(String kakaoId) {
