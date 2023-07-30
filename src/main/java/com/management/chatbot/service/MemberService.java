@@ -4,7 +4,6 @@ import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.Exception.ExistMemberException;
 import com.management.chatbot.domain.CertInfo;
 import com.management.chatbot.domain.Member;
-import com.management.chatbot.domain.Participation;
 import com.management.chatbot.repository.MemberRepository;
 import com.management.chatbot.service.dto.ChallengeResponseDto;
 import com.management.chatbot.service.dto.MemberResponseDto;
