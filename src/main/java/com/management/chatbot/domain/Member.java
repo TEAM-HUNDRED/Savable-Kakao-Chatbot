@@ -95,7 +95,7 @@ public class Member {
         return false; // 동일 챌린지가 존재하지 않는 경우
     }
 
-    public void addCertification(Long challengeId, CertInfo certInfo, Long savedMoney, Long reward) {
+    public ParticipationSaveRequestDto addCertification(Long challengeId, CertInfo certInfo, Long savedMoney, Long reward) {
 
         this.savedMoney += savedMoney;
         this.reward += reward;
@@ -104,13 +104,13 @@ public class Member {
             this.certificationList = new ArrayList<Certification>();
         }
 
-        ListIterator<Certification> iter = this.certificationList.listIterator();
+        ListIterator<Certification> certIter = this.certificationList.listIterator();
 
-        while (iter.hasNext()) {
-            Certification certification = iter.next();
+        while (certIter.hasNext()) {
+            Certification certification = certIter.next();
             if (certification.getChallenge_id().equals(challengeId)) {
                 certification.addCert(certInfo);
-                return;
+                return addCertificationCnt(challengeId);
             }
         }
 
@@ -121,6 +121,24 @@ public class Member {
                 .build();
         newCertification.addCert(certInfo);
         this.certificationList.add(newCertification);
+
+        return addCertificationCnt(challengeId);
+    }
+
+    public ParticipationSaveRequestDto addCertificationCnt(Long challengeId) {
+        ListIterator<Participation> partIter = this.participationList.listIterator();
+        Timestamp now = new Timestamp(System.currentTimeMillis()); // 현재 시간
+
+        while (partIter.hasNext()) {
+            Participation challenge = partIter.next();
+            if (challenge.getChallengeId() == challengeId
+                    && challenge.getStartDate().before(now)
+                    && challenge.getEndDate() != null
+                    && challenge.getEndDate().after(now)) {
+                return challenge.addCertificationCnt();
+            }
+        }
+        return null;
     }
 
     public boolean isMaxCertification(Long challengeId, Long maxCnt) {
@@ -137,12 +155,10 @@ public class Member {
                     dateFromTimestamp = certInfo.getDate().toLocalDateTime();
                     boolean isSameDate = dateFromTimestamp.toLocalDate().isEqual(currentDate.toLocalDate());
                     if (isSameDate) {
-                        System.out.println(Duration.between(dateFromTimestamp, currentDate).toDays());
                         cnt++;
                     }
                 }
 
-                System.out.println("인증 횟수: " + cnt);
                 if (cnt >= maxCnt) return true;
                 else if (Duration.between(dateFromTimestamp, currentDate).toHours() < 3) {
                     throw new DefaultException("동일한 챌린지의 경우 3시간 이내에는 인증을 연속으로 할 수 없습니다😓\r"

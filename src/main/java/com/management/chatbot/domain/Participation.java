@@ -1,6 +1,8 @@
 package com.management.chatbot.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.management.chatbot.service.dto.ParticipationSaveRequestDto;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class Participation implements Serializable{
 
@@ -42,5 +44,16 @@ public class Participation implements Serializable{
                 ", goalCnt=" + goalCnt +
                 ", isSuccess=" + isSuccess +
                 "}";
+    }
+
+    public ParticipationSaveRequestDto addCertificationCnt(){
+        this.certificationCnt++;
+
+        // 챌린지 성공으로 isSuccess 값을 변경
+        if(this.certificationCnt == this.goalCnt){
+            System.out.println("챌린지 성공");
+            this.isSuccess = CheckStatus.PASS;
+        }
+        return new ParticipationSaveRequestDto(this);
     }
 }
