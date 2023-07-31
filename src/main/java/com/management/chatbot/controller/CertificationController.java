@@ -29,6 +29,15 @@ public class CertificationController {
 
         List<ParticipationSaveRequestDto> participationList = memberService.findParticipatingChallenges(kakaoId);
 
+        System.out.println(participationList);
+        if(participationList.isEmpty()) {
+            return new KakaoResponseDto().makeResponseBody("세이버님께서 참여하신 챌린지가 성공적으로 종료되었습니다\uD83D\uDE03\n" +
+                    "\n" +
+                    "만약 챌린지에 다시 참여를 원하시면, 하단의 \"챌린지 목록\" 클릭 → \"챌린지 종류\"를 클릭하여 원하시는 챌린지에 다시 신청해주세요!\n" +
+                    "\n" +
+                    "Savable과 함께 지출을 절약하여 부유한 삶을 누려봐요\uD83E\uDD73");
+        }
+
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         for (ParticipationSaveRequestDto participation : participationList) {
             Long challengeId = participation.getChallengeId();
