@@ -86,7 +86,7 @@ public class CertificationController {
         extraYes.put("challenge_id", String.valueOf(challengeId));
         extraYes.put("certification_image", certificationImage);
         ButtonDto buttonDto = ButtonDto.builder()
-                .label("잘 전송했어요☺️")
+                .label("🅾️")
                 .action("block")
                 .blockId("64b042fa1be84973902bc014")
                 .extra(extraYes)
@@ -96,7 +96,7 @@ public class CertificationController {
         HashMap<String, String> extraNo = new HashMap<>();
         extraNo.put("challenge_id", String.valueOf(challengeId));
         ButtonDto buttonDto2 = ButtonDto.builder()
-                .label("잘못 전송했어요😥")
+                .label("❎")
                 .action("block")
                 .blockId("64a6659d53ad9f7b8fa9887d")
                 .extra(extraNo)
@@ -112,7 +112,6 @@ public class CertificationController {
                         .fixedRatio(true)
                         .build())
                 .buttons(buttonDtoList)
-                .buttonLayout("vertical")
                 .build();
 
         List<HashMap<String, Object>> outputs = new ArrayList<>();
