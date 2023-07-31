@@ -54,7 +54,6 @@ public class CertificationController {
                 .title("인증할 챌린지를 선택해주세요😃")
                 .thumbnail(BasicCard.Thumbnail.builder()
                         .imageUrl("https://raw.githubusercontent.com/TEAM-HUNDRED/Savable-Kakao-Chatbot/6bc3a58b3f524c40a520e312e8395588e3a370e9/src/main/resources/static/images/cert-thumnail.jpg")
-                        .fixedRatio(true)
                         .build())
                 .buttons(buttonDtoList)
                 .build();
@@ -101,6 +100,7 @@ public class CertificationController {
                 .title("올바른 이미지를 전송했는지 확인해주세요😃")
                 .thumbnail(BasicCard.Thumbnail.builder()
                         .imageUrl(certificationImage)
+                        .fixedRatio(true)
                         .build())
                 .buttons(buttonDtoList)
                 .build();
