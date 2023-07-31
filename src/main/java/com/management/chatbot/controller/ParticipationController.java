@@ -67,12 +67,12 @@ public class ParticipationController {
         List<ButtonDto> buttonDtoList = new ArrayList<>();
 
         // url 직접 등록
-        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/1-ba36b6b224834ac3959a793f3fb8d550"); // 커피값 절약 챌린지(리워드 100원)
-        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/1-0a178984c9294df0bf766a87332f8847"); // 배달비 절약 챌린지(리워드 100원)
-        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/2-01fa2011d24d4e2b92997d0c0f5b3f6c"); // 커피값 절약 챌린지(리워드 50원)
-        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/2-f671daaa7e6d49a2b1cc08f864178f7d?pvs=4"); // 배달비 절약 챌린지(리워드 50원)
-        descriptionsUrl.add(""); // 집밥 먹기 절약 챌린지(리워드 100원)
-        descriptionsUrl.add(""); // 집밥 먹기 절약 챌린지(리워드 50원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/bc9163fda3ee4e21a756c23d76881b2c?pvs=4"); // 커피값 절약 챌린지(리워드 100원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/d54921010cce48bf941297677a741a13?pvs=4"); // 배달비 절약 챌린지(리워드 100원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/f67baca06ce74c3d9747c2ae1e05d179?pvs=4"); // 커피값 절약 챌린지(리워드 50원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/d1e8876550544ef891d5f20a42269fd6?pvs=4"); // 배달비 절약 챌린지(리워드 50원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/9d6d9a85080849b185e638f2a48d624f?pvs=4"); // 집밥 먹기 절약 챌린지(리워드 100원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/160767954d144970a912c45507908649?pvs=4"); // 집밥 먹기 절약 챌린지(리워드 50원)
 
         ChallengeResponseDto challengeResponseDto = challengeService.findById(challengeId);
 
