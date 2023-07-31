@@ -80,6 +80,10 @@ public class MemberService {
 
     public List<ParticipationSaveRequestDto> findParticipatingChallenges(String kakaoId) {
         Member member = memberRepository.findByKakaoId(kakaoId);
+        if (member == null){
+            throw new DefaultException("세이버님은 현재 Savable에 가입되어 있지 않습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료 해주세요🤖⚡");
+        }
+
         return member.getParticipatingChallenges();
     }
 }
