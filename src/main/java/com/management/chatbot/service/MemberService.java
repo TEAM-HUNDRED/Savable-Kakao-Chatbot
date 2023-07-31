@@ -2,7 +2,6 @@ package com.management.chatbot.service;
 
 import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.Exception.ExistMemberException;
-import com.management.chatbot.Exception.MaxCertificationException;
 import com.management.chatbot.domain.CertInfo;
 import com.management.chatbot.domain.Member;
 import com.management.chatbot.repository.MemberRepository;
@@ -10,13 +9,15 @@ import com.management.chatbot.service.dto.ChallengeResponseDto;
 import com.management.chatbot.service.dto.MemberResponseDto;
 import com.management.chatbot.service.dto.MemberSaveRequestDto;
 import com.management.chatbot.service.dto.ParticipationSaveRequestDto;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -31,11 +32,10 @@ public class MemberService {
         return memberRepository.save(memberSaveRequestDto.toEntity()).getId();
     }
 
-    @Transactional
     public MemberResponseDto findByKakaoId(String kakaoId) {
         Member member = memberRepository.findByKakaoId(kakaoId);
         if (member == null){
-            throw new DefaultException("세이버님은 현재 Savable에 가입되지 않았습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료한 후에 챌린지 신청을 해주세요🤖⚡");
+            throw new DefaultException("세이버님은 현재 Savable에 가입되어 있지 않습니다.\r채팅창에 \"닉네임 설정\"을 입력한 후 가입을 완료 해주세요🤖⚡");
         }
 
         return new MemberResponseDto(member);
@@ -53,8 +53,9 @@ public class MemberService {
     }
 
     @Transactional
-    public Member certify(String kakaoId, String certificationImage, String message, ChallengeResponseDto challengeResponseDto){
+    public ParticipationSaveRequestDto certify(String kakaoId, String certificationImage, String message, ChallengeResponseDto challengeResponseDto){
         Member member = memberRepository.findByKakaoId(kakaoId); //동일한 카카오 아이디를 가진 멤버 find
+
         CertInfo certInfo = new CertInfo().builder()
                 .image(certificationImage)
                 .date(new Timestamp(System.currentTimeMillis()))
@@ -73,7 +74,12 @@ public class MemberService {
                     + "내일 다시 인증해주세요.");
         }
 
-        member.addCertification(challengeId, certInfo, savedMoney, reward);
-        return member;
+        ParticipationSaveRequestDto participation = member.addCertification(challengeId, certInfo, savedMoney, reward);
+        return participation;
+    }
+
+    public List<ParticipationSaveRequestDto> findParticipatingChallenges(String kakaoId) {
+        Member member = memberRepository.findByKakaoId(kakaoId);
+        return member.getParticipatingChallenges();
     }
 }

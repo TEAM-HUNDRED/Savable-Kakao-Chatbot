@@ -1,13 +1,10 @@
 package com.management.chatbot.controller;
 
 import com.management.chatbot.service.MemberService;
-import com.management.chatbot.service.dto.KakaoBasicCardResponseDto;
+import com.management.chatbot.service.dto.*;
 import com.management.chatbot.service.dto.KakaoDto.BasicCard;
 import com.management.chatbot.service.dto.KakaoDto.ButtonDto;
 import com.management.chatbot.service.dto.KakaoDto.SimpleTextDto;
-import com.management.chatbot.service.dto.KakaoRequestDto;
-import com.management.chatbot.service.dto.KakaoResponseDto;
-import com.management.chatbot.service.dto.MemberSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,6 +43,7 @@ public class MemberController {
     @PostMapping("/ranking") // 랭킹 url 조회
     public HashMap<String, Object> findRankingUrl(@RequestBody KakaoRequestDto kakaoRequestDto) {
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
+        memberService.findByKakaoId(kakaoId); // 해당 멤버가 존재하는지 확인
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         // 기프티콘 샵 url 버튼
@@ -95,13 +93,14 @@ public class MemberController {
     public HashMap<String, Object> findGiftShopUrl(@RequestBody KakaoRequestDto kakaoRequestDto) {
 
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
+        memberService.findByKakaoId(kakaoId); // 해당 멤버가 존재하는지 확인
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         // 기프티콘 샵 url 버튼
         ButtonDto buttonDto = ButtonDto.builder()
                 .label("기프티콘 구매하기")
                 .action("webLink")
-                .webLinkUrl("http://savable.net/shop/" + kakaoId)
+                .webLinkUrl("http://savable.net/savable_shop?kakaoId=" + kakaoId)
                 .build();
         buttonDtoList.add(buttonDto);
 
