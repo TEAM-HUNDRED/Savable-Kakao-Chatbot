@@ -188,6 +188,10 @@ public class Member {
 
     public List<ParticipationSaveRequestDto> getParticipatingChallenges() {
 
+        if (this.participationList == null) {
+            throw new DefaultException("세이버님은 현재 참여중인 챌린지가 없습니다.\n" +
+                    "하단의 \"챌린지 목록\"을 누르고 \"챌린지 종류\" 버튼을 클릭해 원하는 챌린지에 신청한 후 인증해주세요\uD83D\uDE03");
+        }
         ListIterator<Participation> iter = this.participationList.listIterator();
         Timestamp now = new Timestamp(System.currentTimeMillis()); // 현재 시간
 
