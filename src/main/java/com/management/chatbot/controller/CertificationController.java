@@ -129,7 +129,7 @@ public class CertificationController {
         //메시지 1
         Long certificationCnt = participationSaveRequestDto.getCertificationCnt();
         Long goalCnt = participationSaveRequestDto.getGoalCnt();
-        String simpleTextMessage = "음료값 절약 챌린지 인증이 완료되었습니다\uD83C\uDF89\n\n" +
+        String simpleTextMessage =  challengeResponseDto.getTitle() + " 인증이 완료되었습니다\uD83C\uDF89\n\n" +
                 "🔥세이버 " + member.getUsername()  +"님의 챌린지 현황🔥\n" +
                 "- 총 인증 횟수: " + certificationCnt + "회\n" +
                 "- 목표 인증 횟수: " + goalCnt + "회\n" +
