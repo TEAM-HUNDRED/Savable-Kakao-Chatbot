@@ -103,6 +103,7 @@ public class CertificationController {
                         .fixedRatio(true)
                         .build())
                 .buttons(buttonDtoList)
+                .buttonLayout("vertical")
                 .build();
 
         List<HashMap<String, Object>> outputs = new ArrayList<>();
