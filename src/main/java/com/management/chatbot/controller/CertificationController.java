@@ -137,12 +137,12 @@ public class CertificationController {
                 "——————————————\n";
 
         if (certificationCnt < goalCnt) {
-            simpleTextMessage += "챌린지 성공을 위해 " +
+            simpleTextMessage += challengeResponseDto.getTitle() + " 성공을 위해 " +
                     "앞으로 ❗️" + (goalCnt - certificationCnt) +
                     "번❗️ 더 절약해야 해요\uD83D\uDE24\n" +
                     "부자되는 그 날까지 파이팅 \uD83D\uDCB8\uD83E\uDD0D";
         } else if (certificationCnt == goalCnt) {
-            simpleTextMessage += "커피값 절약 챌린지 성공을 축하합니다👏🏻👏🏻\n\n" +
+            simpleTextMessage += challengeResponseDto.getTitle() + " 성공을 축하합니다👏🏻👏🏻\n\n" +
                     "절약을 위한 노력으로 총 " +
                     challengeResponseDto.getSavedMoney() * goalCnt + "원을 아낄 수 있었어요!\n" +
                     "부자에 한 발짝 가까워진 거 같지 않나요..?\uD83D\uDE01\n" +
