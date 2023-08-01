@@ -1,5 +1,6 @@
 package com.management.chatbot.controller;
 
+import com.management.chatbot.domain.CheckStatus;
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.ChallengeResponseDto;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,12 +43,14 @@ public class ParticipationController {
         // 가입 날짜 비교
         if (timestamp.toLocalDateTime().toLocalDate().isBefore(targetDate)) {
             // timestamp의 날짜가 7월 24일인 경우
-            basicCardList.add(makeItem(1L));
-            basicCardList.add(makeItem(2L));
+            basicCardList.add(makeBasicCard(5L));
+            basicCardList.add(makeBasicCard(1L));
+            basicCardList.add(makeBasicCard(2L));
         } else {
             // timestamp의 날짜가 7월 24일 이후인 경우
-            basicCardList.add(makeItem(3L));
-            basicCardList.add(makeItem(4L));
+            basicCardList.add(makeBasicCard(6L));
+            basicCardList.add(makeBasicCard(3L));
+            basicCardList.add(makeBasicCard(4L));
         }
 
         CarouselDto carouselDto = CarouselDto.builder()
@@ -57,15 +62,17 @@ public class ParticipationController {
         return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
-    public BasicCard makeItem(Long challengeId) {
+    public BasicCard makeBasicCard(Long challengeId) {// 챌린지별 basic 카드 생성
         List<String> descriptionsUrl = new ArrayList<>();
         List<ButtonDto> buttonDtoList = new ArrayList<>();
 
         // url 직접 등록
-        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/1-ba36b6b224834ac3959a793f3fb8d550");
-        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/1-0a178984c9294df0bf766a87332f8847");
-        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/2-01fa2011d24d4e2b92997d0c0f5b3f6c");
-        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/2-f671daaa7e6d49a2b1cc08f864178f7d?pvs=4");
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/bc9163fda3ee4e21a756c23d76881b2c?pvs=4"); // 커피값 절약 챌린지(리워드 100원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/d54921010cce48bf941297677a741a13?pvs=4"); // 배달비 절약 챌린지(리워드 100원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/f67baca06ce74c3d9747c2ae1e05d179?pvs=4"); // 커피값 절약 챌린지(리워드 50원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/d1e8876550544ef891d5f20a42269fd6?pvs=4"); // 배달비 절약 챌린지(리워드 50원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/9d6d9a85080849b185e638f2a48d624f?pvs=4"); // 집밥 먹기 절약 챌린지(리워드 100원)
+        descriptionsUrl.add("https://superb-nannyberry-327.notion.site/160767954d144970a912c45507908649?pvs=4"); // 집밥 먹기 절약 챌린지(리워드 50원)
 
         ChallengeResponseDto challengeResponseDto = challengeService.findById(challengeId);
 
@@ -77,11 +84,11 @@ public class ParticipationController {
 
         // 신청하기 버튼
         HashMap<String, String> extra = new HashMap<>();
-        extra.put("Challenge_id", String.valueOf(challengeId));
+        extra.put("challenge_id", String.valueOf(challengeId));
         ButtonDto buttonDto2 = ButtonDto.builder()
                 .label("신청하기")
                 .action("block")
-                .blockId("649c7242acaa9c34a7564e2f")
+                .blockId("64c56f744bc96323949e44f1")
                 .extra(extra)
                 .build();
 
@@ -92,7 +99,20 @@ public class ParticipationController {
         if (challengeResponseDto.getTitle().equals("음료값 절약 챌린지")){
             basicCardDto = BasicCard.builder()
                     .title("음료값 절약 챌린지☕️")
-                    .description("음료값 절약하고 기프티콘 받아가자")
+                    .description("음료값 절약하고 티끌 모아 부자되자💸\n" +
+                            "(챌린지 진행 기간: 7일)")
+                    .thumbnail(BasicCard.Thumbnail.builder()
+                            .imageUrl(challengeResponseDto.getThumbnail())
+                            .fixedRatio(true)
+                            .build())
+                    .buttons(buttonDtoList)
+                    .buttonLayout("horizontal")
+                    .build();
+        } else if (challengeResponseDto.getTitle().equals("집밥 먹기 절약 챌린지")) {
+            basicCardDto = BasicCard.builder()
+                    .title("[NEW] 집밥 먹기 절약 챌린지🍚")
+                    .description("식비 절약하고 티끌 모아 태산 만들자🍀\n" +
+                            "(챌린지 진행 기간: 7일)")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
                             .fixedRatio(true)
@@ -103,7 +123,8 @@ public class ParticipationController {
         } else {
             basicCardDto = BasicCard.builder()
                     .title("배달비 절약 챌린지🍔️")
-                    .description("배달비 절약하고 기프티콘 받아가자")
+                    .description("배달비 절약해서 합리적인 소비하자🙆‍♀️\n" +
+                            "(챌린지 진행 기간: 7일)")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
                             .fixedRatio(true)
@@ -119,16 +140,22 @@ public class ParticipationController {
     @PostMapping("/participation") // 챌린지 참여
     public HashMap<String, Object> participateChallenge(@RequestBody KakaoRequestDto kakaoRequestDto) {
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();// 유저의 카카오 아이디
-        String challengeId = kakaoRequestDto.getAction().getClientExtra().get("Challenge_id");// 챌린지 아이디
+        String challengeId = kakaoRequestDto.getAction().getClientExtra().get("challenge_id");// 챌린지 아이디
+        ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId)); // 챌린지 정보
+
+        String goalCnt = kakaoRequestDto.getAction().getDetailParams().get("min_goal").getOrigin(); // 최소 인증 목표 횟수
+        Timestamp endDate = calculateEndDate(challengeResponseDto.getDuration()); // 챌린지 종료일 계산
 
         ParticipationSaveRequestDto participationSaveRequestDto = ParticipationSaveRequestDto.builder()
                 .challengeId(Long.parseLong(challengeId))
                 .certificationCnt(0L)
                 .startDate(new Timestamp(System.currentTimeMillis()))
+                .endDate(endDate)
+                .goalCnt(Long.parseLong(goalCnt))
+                .isSuccess(CheckStatus.FAIL)
                 .build();
 
         memberService.participate(kakaoId, participationSaveRequestDto); // 챌린지 참여
-        ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId)); // 챌린지 정보
 
         String challengeTitle = challengeResponseDto.getTitle();
 
@@ -138,7 +165,13 @@ public class ParticipationController {
         HashMap<String, Object> simpleImage = new HashMap<>();
 
         // 메시지 1
-        String participateText = challengeTitle + " 신청이 완료되었습니다.\n앞으로 Savable과 함께 열심히 절약해 나가요🔥";
+        SimpleDateFormat sdf = new SimpleDateFormat("M/d");
+        String formattedDate = sdf.format(endDate);
+
+        String participateText = challengeTitle + " 신청이 완료되었습니다.\n" +
+                "7일 동안(" + formattedDate + "까지)" +
+                " 최소 " + goalCnt + "회 이상 인증할 경우 🎉절약 챌린지 성공🎉으로 인정됩니다!\n\n" +
+                "앞으로 Savable과 함께 열심히 절약해 나가요🔥";
         SimpleTextDto simpleTextDto1 = SimpleTextDto.builder()
                 .text(participateText)
                 .build();
@@ -156,9 +189,11 @@ public class ParticipationController {
         outputs.add(simpleImage);
 
         // 메시지 3
-        String certExamTitle = "▶️ " + challengeTitle + " 인증 방법\n첨부된 이미지를 참고하여 인증 사진을 보내주세요.\n\n매일 최대 2회 인증할 수 있으며, 1회 인증 마다 Savable 포인트 "
-                + challengeResponseDto.getReward()
-                +"원을 받아가실 수 있습니다🥰\nSavable 포인트를 이용해 추후 기프티콘 구매가 가능합니다.";
+        String certExamTitle = "💌" + challengeTitle + " 인증 방법💌\n" +
+                "위 이미지를 참고해 인증 사진을 보내주세요.\n\n최대 인증 횟수는 제한이 없으며, 1회 인증 마다 Savable 포인트 "+
+                challengeResponseDto.getReward()+
+                "원을 드립니다🥰\n\n" +
+                "Savable 포인트로 추후 기프티콘 구매가 가능합니다.";
         SimpleTextDto simpleTextDto2 = SimpleTextDto.builder()
                 .text(certExamTitle)
                 .build();
@@ -167,6 +202,13 @@ public class ParticipationController {
         outputs.add(simpleText2);
 
         return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+    }
+
+    public Timestamp calculateEndDate(Long duration){
+        // endDate 계산
+        LocalDateTime currentLocalDateTime = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(59);
+        LocalDateTime newLocalDateTime = currentLocalDateTime.plusDays(duration);
+        return Timestamp.valueOf(newLocalDateTime);
     }
 
     @PostMapping("/status") // 챌린지 참여 현황
