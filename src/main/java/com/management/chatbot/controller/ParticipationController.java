@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequiredArgsConstructor
@@ -145,8 +147,10 @@ public class ParticipationController {
         ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId)); // 챌린지 정보
 
         String goalCnt = kakaoRequestDto.getAction().getDetailParams().get("min_goal").getOrigin(); // 최소 인증 목표 횟수
-        if (Integer.valueOf(goalCnt) < 1){
-            return new KakaoResponseDto().makeResponseBody("절약 인증 횟수는 1 이상이어야 합니다.\n세이버님의 절약 목표에 맞는 올바른 값을 입력해주세요😢");
+        if (!isNaturalNumber(goalCnt)){
+            return new KakaoResponseDto().makeResponseBody("\'절약 인증 횟수\'는 1 이상의 숫자여야 합니다.\n" +
+                    "챗봇의 안내에 따라 올바른 값을 입력해주세요😢\n\n" +
+                    "챌린지를 처음부터 다시 신청해주시길 바랍니다.");
         }
         Timestamp endDate = calculateEndDate(challengeResponseDto.getDuration()); // 챌린지 종료일 계산
 
@@ -208,11 +212,23 @@ public class ParticipationController {
         return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
+    // endDate 계산해주는 함수
     public Timestamp calculateEndDate(Long duration){
-        // endDate 계산
         LocalDateTime currentLocalDateTime = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(59);
         LocalDateTime newLocalDateTime = currentLocalDateTime.plusDays(duration);
         return Timestamp.valueOf(newLocalDateTime);
+    }
+
+    // 자연수인지 확인하는 함수(절약 횟수 확인용)
+    public static boolean isNaturalNumber(String input) {
+        // Define the regex pattern to match a positive natural number
+        Pattern pattern = Pattern.compile("^[1-9]\\d*$");
+
+        // Create a Matcher object to apply the pattern to the input string
+        Matcher matcher = pattern.matcher(input);
+
+        // Check if the input string matches the pattern
+        return matcher.matches();
     }
 
     @PostMapping("/status") // 챌린지 참여 현황
