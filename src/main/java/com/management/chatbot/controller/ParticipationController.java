@@ -43,14 +43,14 @@ public class ParticipationController {
         // 가입 날짜 비교
         if (timestamp.toLocalDateTime().toLocalDate().isBefore(targetDate)) {
             // timestamp의 날짜가 7월 24일인 경우
+            basicCardList.add(makeBasicCard(5L));
             basicCardList.add(makeBasicCard(1L));
             basicCardList.add(makeBasicCard(2L));
-            basicCardList.add(makeBasicCard(5L));
         } else {
             // timestamp의 날짜가 7월 24일 이후인 경우
+            basicCardList.add(makeBasicCard(6L));
             basicCardList.add(makeBasicCard(3L));
             basicCardList.add(makeBasicCard(4L));
-            basicCardList.add(makeBasicCard(6L));
         }
 
         CarouselDto carouselDto = CarouselDto.builder()
@@ -99,8 +99,8 @@ public class ParticipationController {
         if (challengeResponseDto.getTitle().equals("음료값 절약 챌린지")){
             basicCardDto = BasicCard.builder()
                     .title("음료값 절약 챌린지☕️")
-                    .description("음료값 절약하고 티끌 모아 태산 실천하자!\n" +
-                            " (챌린지 진행 기간: 7일)")
+                    .description("음료값 절약하고 티끌 모아 부자되자💸\n" +
+                            "(챌린지 진행 기간: 7일)")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
                             .fixedRatio(true)
@@ -110,9 +110,9 @@ public class ParticipationController {
                     .build();
         } else if (challengeResponseDto.getTitle().equals("집밥 먹기 절약 챌린지")) {
             basicCardDto = BasicCard.builder()
-                    .title("집밥 먹기 절약 챌린지🍚")
-                    .description("집밥 먹고 절약해서 티끌 모아 태산 실천하자!\n" +
-                            " (챌린지 진행 기간: 7일)")
+                    .title("[NEW] 집밥 먹기 절약 챌린지🍚")
+                    .description("집밥 먹고 절약해서 티끌 모아 태산 실천하자🍀\n" +
+                            "(챌린지 진행 기간: 7일)")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
                             .fixedRatio(true)
@@ -123,8 +123,8 @@ public class ParticipationController {
         } else {
             basicCardDto = BasicCard.builder()
                     .title("배달비 절약 챌린지🍔️")
-                    .description("배달비 절약하고 티끌 모아 태산 실천하자!\n" +
-                            " (챌린지 진행 기간: 7일)")
+                    .description("배달비 절약해서 합리적인 소비하자🙆‍♀️\n" +
+                            "(챌린지 진행 기간: 7일)")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
                             .fixedRatio(true)
