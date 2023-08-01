@@ -1,5 +1,6 @@
 package com.management.chatbot.controller;
 
+import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.domain.CheckStatus;
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
@@ -144,6 +145,9 @@ public class ParticipationController {
         ChallengeResponseDto challengeResponseDto = challengeService.findById(Long.parseLong(challengeId)); // 챌린지 정보
 
         String goalCnt = kakaoRequestDto.getAction().getDetailParams().get("min_goal").getOrigin(); // 최소 인증 목표 횟수
+        if (Integer.valueOf(goalCnt) < 1){
+            return new KakaoResponseDto().makeResponseBody("절약 인증 횟수는 1 이상이어야 합니다.\n세이버님의 절약 목표에 맞는 올바른 값을 입력해주세요😢");
+        }
         Timestamp endDate = calculateEndDate(challengeResponseDto.getDuration()); // 챌린지 종료일 계산
 
         ParticipationSaveRequestDto participationSaveRequestDto = ParticipationSaveRequestDto.builder()
