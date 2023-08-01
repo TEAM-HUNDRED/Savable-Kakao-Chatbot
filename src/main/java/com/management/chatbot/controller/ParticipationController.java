@@ -111,7 +111,7 @@ public class ParticipationController {
         } else if (challengeResponseDto.getTitle().equals("집밥 먹기 절약 챌린지")) {
             basicCardDto = BasicCard.builder()
                     .title("[NEW] 집밥 먹기 절약 챌린지🍚")
-                    .description("식비 절약하고 티끌 모아 태산 실천하자🍀\n" +
+                    .description("식비 절약하고 티끌 모아 태산 만들자🍀\n" +
                             "(챌린지 진행 기간: 7일)")
                     .thumbnail(BasicCard.Thumbnail.builder()
                             .imageUrl(challengeResponseDto.getThumbnail())
