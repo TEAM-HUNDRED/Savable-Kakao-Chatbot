@@ -62,7 +62,7 @@ public class CertificationController {
         BasicCard basicCardDto = BasicCard.builder()
                 .title("인증할 챌린지를 선택해주세요😃")
                 .thumbnail(BasicCard.Thumbnail.builder()
-                        .imageUrl("https://raw.githubusercontent.com/TEAM-HUNDRED/Savable-Kakao-Chatbot/6bc3a58b3f524c40a520e312e8395588e3a370e9/src/main/resources/static/images/cert-thumnail.jpg")
+                        .imageUrl("https://chatbot-budket.s3.ap-northeast-2.amazonaws.com/management/cert-thumnail.jpg")
                         .build())
                 .buttons(buttonDtoList)
                 .build();
