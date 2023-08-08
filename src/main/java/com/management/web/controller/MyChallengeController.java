@@ -1,8 +1,7 @@
-package com.management.chatbot.web.controller;
+package com.management.web.controller;
 
-import com.management.chatbot.web.dto.MyChallengeInfoDto;
-import com.management.chatbot.web.service.ParticipateChallengeService;
-import lombok.extern.slf4j.Slf4j;
+import com.management.web.service.dto.MyChallengeInfoDto;
+import com.management.web.service.ParticipateChallengeService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

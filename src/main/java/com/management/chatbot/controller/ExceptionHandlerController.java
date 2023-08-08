@@ -4,7 +4,7 @@ import com.management.chatbot.Exception.AlreadyJoinedException;
 import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.Exception.ExistMemberException;
 import com.management.chatbot.Exception.MaxCertificationException;
-import com.management.chatbot.service.dto.KakaoResponseDto;
+import com.management.chatbot.service.dto.KakaoDto.KakaoResponseDto;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

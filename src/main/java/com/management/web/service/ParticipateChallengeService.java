@@ -1,7 +1,7 @@
-package com.management.chatbot.web.service;
+package com.management.web.service;
 
-import com.management.chatbot.web.dto.MyChallengeInfoDto;
-import com.management.chatbot.web.repository.MemberWebRepository;
+import com.management.web.service.dto.MyChallengeInfoDto;
+import com.management.web.repository.MemberWebRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

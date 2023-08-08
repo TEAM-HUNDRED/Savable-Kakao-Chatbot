@@ -1,9 +1,9 @@
-package com.management.chatbot.web.repository;
+package com.management.web.repository;
 
-import com.management.chatbot.web.dto.MyChallengeInfoDto;
-import com.management.chatbot.web.dto.MyMainInfoDto;
-import com.management.chatbot.web.dto.MyPrivateRankingInfoDto;
-import com.management.chatbot.web.dto.MyRankingInfoDto;
+import com.management.web.service.dto.MyChallengeInfoDto;
+import com.management.web.service.dto.MyMainInfoDto;
+import com.management.web.service.dto.MyPrivateRankingInfoDto;
+import com.management.web.service.dto.MyRankingInfoDto;
 
 import java.util.List;
 

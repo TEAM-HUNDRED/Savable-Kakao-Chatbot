@@ -4,6 +4,8 @@ import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.service.FallbackLogService;
 import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.*;
+import com.management.chatbot.service.dto.KakaoDto.KakaoRequestDto;
+import com.management.chatbot.service.dto.KakaoDto.KakaoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,11 +22,11 @@ public class FallbackLogController {
     private final MemberService memberService;
 
     @PostMapping("/fallback")
-    public HashMap<String, Object> fallback(@RequestBody KakaoImageRequestDto kakaoImageRequestDto) {
-        String kakaoId = kakaoImageRequestDto.getUserRequest().getUser().getId();
-        String message = kakaoImageRequestDto.getUserRequest().getUtterance();
+    public HashMap<String, Object> fallback(@RequestBody KakaoRequestDto kakaoRequestDto) {
+        String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
+        String message = kakaoRequestDto.getUserRequest().getUtterance();
         try {
-            String image = kakaoImageRequestDto.getUserRequest().getParams().getMedia().getUrl();
+            String image = kakaoRequestDto.getUserRequest().getParams().getMedia().getUrl();
         } catch (Exception e){
             MemberResponseDto memberResponseDto = memberService.findByKakaoId(kakaoId);
             FallbackLogSaveRequestDto fallbackLogSaveRequestDto = FallbackLogSaveRequestDto.builder()

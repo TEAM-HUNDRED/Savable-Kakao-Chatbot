@@ -1,6 +1,5 @@
 package com.management.web.controller;
 
-import com.management.chatbot.domain.Member;
 import com.management.chatbot.service.MemberService;
 import com.management.web.domain.GiftcardOrder;
 import com.management.web.service.GiftcardService;

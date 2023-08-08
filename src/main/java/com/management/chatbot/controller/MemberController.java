@@ -2,9 +2,7 @@ package com.management.chatbot.controller;
 
 import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.*;
-import com.management.chatbot.service.dto.KakaoDto.BasicCard;
-import com.management.chatbot.service.dto.KakaoDto.ButtonDto;
-import com.management.chatbot.service.dto.KakaoDto.SimpleTextDto;
+import com.management.chatbot.service.dto.KakaoDto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -86,7 +84,7 @@ public class MemberController {
         basicCard.put("basicCard", basicCardDto);
         outputs.add(basicCard);
         outputs.add(simpleText);
-        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+        return new com.management.chatbot.service.dto.KakaoDto.KakaoResponseDto.KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
     @PostMapping("/giftshop") // 기프티콘 샵 url 조회
@@ -116,6 +114,6 @@ public class MemberController {
         HashMap<String, Object> basicCard = new HashMap<>();
         basicCard.put("basicCard", basicCardDto);
         outputs.add(basicCard);
-        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+        return new com.management.chatbot.service.dto.KakaoDto.KakaoResponseDto.KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 }

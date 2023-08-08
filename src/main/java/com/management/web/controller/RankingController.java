@@ -1,11 +1,8 @@
-package com.management.chatbot.web.controller;
+package com.management.web.controller;
 
-import com.management.chatbot.web.dto.RankingDto;
-import com.management.chatbot.web.service.RankingService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.management.web.service.dto.RankingDto;
+import com.management.web.service.RankingService;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/ranking")
