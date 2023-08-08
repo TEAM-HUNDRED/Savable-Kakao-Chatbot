@@ -1,10 +1,10 @@
-package com.management.chatbot.web.service;
+package com.management.web.service;
 
 import com.management.chatbot.domain.Member;
 import com.management.chatbot.repository.MemberRepository;
-import com.management.chatbot.web.dto.MyPrivateRankingInfoDto;
-import com.management.chatbot.web.dto.MyRankingInfoDto;
-import com.management.chatbot.web.repository.MemberWebRepository;
+import com.management.web.service.dto.MyPrivateRankingInfoDto;
+import com.management.web.service.dto.MyRankingInfoDto;
+import com.management.web.repository.MemberWebRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

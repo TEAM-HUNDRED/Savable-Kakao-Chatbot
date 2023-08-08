@@ -1,4 +1,4 @@
-package com.management.chatbot.web.dto;
+package com.management.web.service.dto;
 
 import lombok.Builder;
 import lombok.Data;

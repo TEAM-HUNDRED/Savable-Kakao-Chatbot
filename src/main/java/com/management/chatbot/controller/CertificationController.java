@@ -3,9 +3,7 @@ package com.management.chatbot.controller;
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.*;
-import com.management.chatbot.service.dto.KakaoDto.BasicCard;
-import com.management.chatbot.service.dto.KakaoDto.ButtonDto;
-import com.management.chatbot.service.dto.KakaoDto.SimpleTextDto;
+import com.management.chatbot.service.dto.KakaoDto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,14 +69,14 @@ public class CertificationController {
         HashMap<String, Object> basicCard = new HashMap<>();
         basicCard.put("basicCard", basicCardDto);
         outputs.add(basicCard);
-        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+        return new com.management.chatbot.service.dto.KakaoDto.KakaoResponseDto.KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
     @PostMapping("/certification/image")
-    public HashMap<String, Object> certificationImage(@RequestBody KakaoImageRequestDto kakaoImageRequestDto) {
+    public HashMap<String, Object> certificationImage(@RequestBody KakaoRequestDto kakaoRequestDto) {
         // 인증 정보
-        String certificationImage = kakaoImageRequestDto.getAction().getParams().get("Certification_image");
-        String challengeId = kakaoImageRequestDto.getAction().getClientExtra().get("challenge_id");
+        String certificationImage = kakaoRequestDto.getAction().getParams().get("Certification_image");
+        String challengeId = kakaoRequestDto.getAction().getClientExtra().get("challenge_id");
 
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         // 예 버튼
@@ -118,11 +116,11 @@ public class CertificationController {
         HashMap<String, Object> basicCard = new HashMap<>();
         basicCard.put("basicCard", basicCardDto);
         outputs.add(basicCard);
-        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+        return new com.management.chatbot.service.dto.KakaoDto.KakaoResponseDto.KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
     @PostMapping("/certification/message")
-    public HashMap<String, Object> certificationMessage(@RequestBody KakaoImageRequestDto kakaoRequestDto) {
+    public HashMap<String, Object> certificationMessage(@RequestBody KakaoRequestDto kakaoRequestDto) {
 
         String kakaoId = kakaoRequestDto.getUserRequest().getUser().getId();
         String certificationImage = kakaoRequestDto.getAction().getClientExtra().get("certification_image");
@@ -198,6 +196,6 @@ public class CertificationController {
         basicCard.put("basicCard", basicCardDto);
         outputs.add(basicCard);
 
-        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+        return new com.management.chatbot.service.dto.KakaoDto.KakaoResponseDto.KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 }

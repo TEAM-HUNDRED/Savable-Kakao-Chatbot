@@ -1,7 +1,8 @@
-package com.management.chatbot.web.controller;
+package com.management.web.controller;
 
-import com.management.chatbot.web.dto.MyMainInfoDto;
-import com.management.chatbot.web.service.MainService;
+
+import com.management.web.service.MainService;
+import com.management.web.service.dto.MyMainInfoDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
