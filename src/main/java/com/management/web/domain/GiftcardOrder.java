@@ -1,17 +1,16 @@
 package com.management.web.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor
 public class GiftcardOrder {
     @Id
@@ -23,6 +22,9 @@ public class GiftcardOrder {
     private String positivePoints;
     private String negativePoints;
     private Timestamp date;
+//
+//    @ManyToOne
+//    private GiftcardProduct giftcardProduct;
 
     @Builder
     public GiftcardOrder(String kakaoId, Long giftcardId, Long quantity, String positivePoints, String negativePoints, Timestamp date) {
