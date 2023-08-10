@@ -22,17 +22,16 @@ public class GiftcardOrder {
     private String positivePoints;
     private String negativePoints;
     private Timestamp date;
-//
-//    @ManyToOne
-//    private GiftcardProduct giftcardProduct;
+    private String status;
 
     @Builder
-    public GiftcardOrder(String kakaoId, Long giftcardId, Long quantity, String positivePoints, String negativePoints, Timestamp date) {
+    public GiftcardOrder(String kakaoId, Long giftcardId, Long quantity, String positivePoints, String negativePoints, Timestamp date,String status) {
         this.kakaoId = kakaoId;
         this.giftcardId = giftcardId;
         this.quantity = quantity;
         this.positivePoints = positivePoints;
         this.negativePoints = negativePoints;
         this.date = date;
+        this.status = status;
     }
 }
