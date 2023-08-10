@@ -16,7 +16,6 @@ public class GiftcardHistoryDto {
     private Long quantity;
     private Long price;
     private String image;
-    private String status;
 
     public GiftcardHistoryDto(List<Object> objects) {
         GiftcardOrder giftcardOrder = (GiftcardOrder) objects.get(0);
@@ -27,8 +26,6 @@ public class GiftcardHistoryDto {
         this.quantity = giftcardOrder.getQuantity();
         this.price = giftcardProduct.getPrice() * quantity;
         this.image = giftcardProduct.getImage();
-        this.status = giftcardOrder.getStatus();
-
     }
 
 }
