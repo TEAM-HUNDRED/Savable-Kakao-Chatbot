@@ -20,7 +20,6 @@ public class OrderSaveRequestDto {
     private String status;
 
     public GiftcardOrder toEntity(){
-        this.status = GiftcardOrderStatus.WAIT.getName();
         return GiftcardOrder.builder()
                 .kakaoId(kakaoId)
                 .giftcardId(giftcardId)

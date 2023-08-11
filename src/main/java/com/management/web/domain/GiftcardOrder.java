@@ -32,6 +32,6 @@ public class GiftcardOrder {
         this.positivePoints = positivePoints;
         this.negativePoints = negativePoints;
         this.date = date;
-        this.status = status;
+        this.status = GiftcardOrderStatus.WAIT.getName();
     }
 }
