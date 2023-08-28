@@ -1,9 +1,6 @@
 package com.management.web.repository;
 
-import com.management.web.service.dto.MyChallengeInfoDto;
-import com.management.web.service.dto.MyMainInfoDto;
-import com.management.web.service.dto.MyPrivateRankingInfoDto;
-import com.management.web.service.dto.MyRankingInfoDto;
+import com.management.web.service.dto.*;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ public interface MemberWebRepository {
     List<MyRankingInfoDto> findRankingInfoList();
 
     List<MyChallengeInfoDto> findParticipateChallengeList(String kakaoId);
+    List<MyChallengeCertDto> findChallengeCertList(Integer challengeId, String kakaoId);
 
     MyMainInfoDto findMainInfoByKakaoId(String kakaoId);
 }

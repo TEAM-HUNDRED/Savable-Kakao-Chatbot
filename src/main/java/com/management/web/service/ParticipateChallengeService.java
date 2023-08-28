@@ -1,5 +1,6 @@
 package com.management.web.service;
 
+import com.management.web.service.dto.MyChallengeCertDto;
 import com.management.web.service.dto.MyChallengeInfoDto;
 import com.management.web.repository.MemberWebRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,5 +15,9 @@ public class ParticipateChallengeService {
 
     public List<MyChallengeInfoDto> getMyParticipateChallenge(String kakaoId){
         return memberWebRepository.findParticipateChallengeList(kakaoId);
+    }
+
+    public List<MyChallengeCertDto> getChallengeCertList(Integer challengeId, String kakaoId){
+        return memberWebRepository.findChallengeCertList(challengeId,kakaoId);
     }
 }
