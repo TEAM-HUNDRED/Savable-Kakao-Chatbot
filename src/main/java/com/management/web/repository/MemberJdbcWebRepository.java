@@ -1,9 +1,6 @@
 package com.management.web.repository;
 
-import com.management.web.service.dto.MyChallengeInfoDto;
-import com.management.web.service.dto.MyMainInfoDto;
-import com.management.web.service.dto.MyPrivateRankingInfoDto;
-import com.management.web.service.dto.MyRankingInfoDto;
+import com.management.web.service.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -139,6 +136,40 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
         return myChallengeList;
     }
 
+    @Override
+    public List<MyChallengeCertDto> findChallengeCertList(Integer challengeId, String kakaoId){
+        String sql="WITH partiChall AS(SELECT\n" +
+                "  m.username,\n" +
+                "  m.kakao_id AS kakao_id,\n" +
+                "  c.title AS title,\n" +
+                "  data_row ->> 'startDate' AS startDate,\n" +
+                "  data_row ->> 'endDate' AS endDate,\n" +
+                "  data_row ->> 'goalCnt' AS goalCnt,\n" +
+                "  data_row ->> 'challengeId' AS challengeId,\n" +
+                "  data_row ->> 'certificationCnt' AS certificationCnt,\n" +
+                "  data_row ->> 'isSuccess' AS isSuccess\n" +
+                "FROM \"member\" m ,\n" +
+                "     jsonb_array_elements(m.participation) AS data_row JOIN challenge c ON (data_row ->> 'challengeId')::integer=c.id\n" +
+                "WHERE m.kakao_id =?\n" +
+                "AND current_date >= (data_row ->> 'startDate')::date\n" +
+                "\tAND current_date <= (data_row ->> 'endDate')::date\n" +
+                "AND (data_row ->> 'challengeId')::integer = ?)\n" +
+                "SELECT\n" +
+                "  DATE_TRUNC('day', (cert_data->>'date')::timestamp) AS DAY,\n" +
+                "  count(1) AS count\n" +
+                "FROM \"member\" m ,\n" +
+                "\tpartiChall AS pc JOIN jsonb_array_elements(m.certification) AS data_row \n" +
+                "\tON (pc.challengeId = data_row ->> 'challenge_id'),\n" +
+                "    jsonb_array_elements(data_row->'cert') AS cert_data\n" +
+                "WHERE m.kakao_id = pc.kakao_id\n" +
+                "AND pc.startDate::date <= (cert_data->>'date')::date\n" +
+                "AND pc.endDate::date >=(cert_data->>'date')::date\n" +
+                "AND cert_data->>'check' != 'FAIL'\n" +
+                "GROUP BY day;";
+        List<MyChallengeCertDto> myChallengeCertList = template.query(sql, challengeCertRowMapper(),kakaoId,challengeId);
+        return myChallengeCertList;
+    }
+
     public MyMainInfoDto findMainInfoByKakaoId(String kakaoId){
         String sql = "select username, saved_money, reward\n" +
                 "from \"member\" m \n" +
@@ -179,6 +210,15 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
                         .username(rs.getString("username"))
                         .cnt(rs.getInt("cnt"))
                         .challengeId(rs.getInt("challengeId"))
+                        .build()
+        );
+    }
+
+    private RowMapper<MyChallengeCertDto> challengeCertRowMapper() {
+        return ((rs, rowNum) ->
+                MyChallengeCertDto.builder()
+                        .date(rs.getTimestamp("day"))
+                        .count(rs.getInt("count"))
                         .build()
         );
     }
