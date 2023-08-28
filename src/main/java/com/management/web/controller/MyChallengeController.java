@@ -21,7 +21,7 @@ public class MyChallengeController {
         return participateChallengeService.getMyParticipateChallenge(kakaoId);
     }
     @GetMapping("{challengeId}/users/{kakaoId}")
-    public List<MyChallengeCertDto> getMyChallengeInfo(@PathVariable Integer challengeId, @PathVariable String kakaoId){
+    public List<MyChallengeCertDto> getMyChallengeCertInfo(@PathVariable Integer challengeId, @PathVariable String kakaoId){
         return participateChallengeService.getChallengeCertList(challengeId, kakaoId);
     }
 }
