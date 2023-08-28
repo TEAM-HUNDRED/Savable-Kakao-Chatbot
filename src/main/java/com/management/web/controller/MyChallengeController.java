@@ -2,10 +2,7 @@ package com.management.web.controller;
 
 import com.management.web.service.dto.MyChallengeInfoDto;
 import com.management.web.service.ParticipateChallengeService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +15,9 @@ public class MyChallengeController {
         this.participateChallengeService = participateChallengeService;
     }
 
-    @GetMapping
-    public List<MyChallengeInfoDto> getMyChallengeInfo(@RequestParam String kakaoId){
+    @GetMapping("/{kakaoId}")
+    public List<MyChallengeInfoDto> getMyChallengeInfo(@PathVariable String kakaoId){
         return participateChallengeService.getMyParticipateChallenge(kakaoId);
     }
+
 }

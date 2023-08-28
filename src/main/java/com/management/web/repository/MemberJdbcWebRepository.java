@@ -123,21 +123,18 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
 
     @Override
     public List<MyChallengeInfoDto> findParticipateChallengeList(String kakaoId){
-        String sql="with chall as (\n" +
-                "SELECT\n" +
-                "  data_row ->>'challenge_id' as c_id,\n" +
-                "  m.kakao_id,\n" +
-                "  count(*) cnt,\n" +
-                "  m.username \n" +
+        String sql="SELECT\n" +
+                "  c.title AS title,\n" +
+                "  m.username AS username,\n" +
+                "  data_row ->> 'certificationCnt' AS cnt,\n" +
+                "  c.reward*(data_row ->> 'certificationCnt')::int AS reward,\n" +
+                "  c.saved_money*(data_row ->> 'certificationCnt')::int AS saved_money,\n" +
+                "  data_row ->> 'challengeId' AS challengeId\n" +
                 "FROM \"member\" m ,\n" +
-                "     jsonb_array_elements(m.certification) AS data_row,\n" +
-                "     jsonb_array_elements(data_row->'cert') AS cert_data\n" +
-                "where cert_data->>'check' != 'FAIL' and m.kakao_id =?\n" +
-                "group by m.kakao_id,c_id,m.username)\n" +
-                "select chall.kakao_id, c2.title,chall.username,\n" +
-                "c2.saved_money*chall.cnt as saved_money,\n" +
-                "c2.reward*chall.cnt as reward,chall.cnt as cnt\n" +
-                "from chall join challenge c2 on chall.c_id::int = c2.id;";
+                "     jsonb_array_elements(m.participation) AS data_row JOIN challenge c ON (data_row ->> 'challengeId')::integer=c.id\n" +
+                "WHERE m. kakao_id =?\n" +
+                "AND current_date >= (data_row ->> 'startDate')::date\n" +
+                "\tAND current_date <= (data_row ->> 'endDate')::date;";
         List<MyChallengeInfoDto> myChallengeList = template.query(sql, challengeRowMapper(),kakaoId);
         return myChallengeList;
     }
@@ -181,6 +178,7 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
                         .reward(rs.getInt("reward"))
                         .username(rs.getString("username"))
                         .cnt(rs.getInt("cnt"))
+                        .challengeId(rs.getInt("challengeId"))
                         .build()
         );
     }
