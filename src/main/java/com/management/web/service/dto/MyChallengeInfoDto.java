@@ -13,12 +13,14 @@ public class MyChallengeInfoDto {
     private Integer reward;
     private String username;
     private Integer cnt;
+    private Integer challengeId;
 
-    public MyChallengeInfoDto(String title, Integer savedMoney, Integer reward, String username, Integer cnt) {
+    public MyChallengeInfoDto(String title, Integer savedMoney, Integer reward, String username, Integer cnt,Integer challengeId) {
         this.title = title;
         this.savedMoney = savedMoney;
         this.reward = reward;
         this.username = username;
         this.cnt = cnt;
+        this.challengeId = challengeId;
     }
 }
