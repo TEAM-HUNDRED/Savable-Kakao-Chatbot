@@ -2,6 +2,11 @@ package com.management.web.api;
 
 import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.MemberResponseDto;
+import com.management.chatbot.service.dto.MemberSaveRequestDto;
+import com.management.web.domain.GiftcardProduct;
+import com.management.web.repository.GiftcardProductRepository;
+import com.management.web.service.GiftcardService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +25,33 @@ public class GiftshopTest {
     private MemberService memberService;
 
     @Autowired
+    private GiftcardProductRepository giftcardProductRepository;
+
+    @Autowired
     MockMvc mvc;
 
+    String kakaoId = "test";
+
+    @BeforeEach
+    void setUp() {
+        memberService.save(MemberSaveRequestDto.builder()
+                .kakaoId(kakaoId)
+                .username("test")
+                .reward(0L)
+                .savedMoney(0L)
+                .build());
+
+        giftcardProductRepository.save(GiftcardProduct.builder()
+                .name("test")
+                .price(10000L)
+                .saleYN(true)
+                .build());
+    }
     @Test
     @DisplayName("기프티콘 목록 API 테스트")
     void getGiftcardList() throws Exception {
         // given
-        MemberResponseDto member = memberService.findByKakaoId("f233a5da9da3e4f070a4ccd4445dca6b66b368f558b91276218e064cb504a71afc");
+        MemberResponseDto member = memberService.findByKakaoId(kakaoId);
         String username = member.getUsername();
         Long reward = member.getReward();
 
@@ -34,7 +59,7 @@ public class GiftshopTest {
 
         // then
         mvc.perform(
-                        MockMvcRequestBuilders.get("/shop/{kakaoId}", "f233a5da9da3e4f070a4ccd4445dca6b66b368f558b91276218e064cb504a71afc"))
+                        MockMvcRequestBuilders.get("/shop/{kakaoId}", kakaoId))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.member.username").value(username))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.member.reward").value(reward))
