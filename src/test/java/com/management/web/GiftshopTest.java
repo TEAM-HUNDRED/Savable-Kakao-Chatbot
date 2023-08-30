@@ -24,7 +24,7 @@ public class GiftshopTest {
     MockMvc mvc;
 
     @Test
-    @DisplayName("기프티콘 목록 컨트롤러 테스트")
+    @DisplayName("기프티콘 목록 API 테스트")
     void getGiftcardList() throws Exception {
         // given
         MemberResponseDto member = memberService.findByKakaoId("f233a5da9da3e4f070a4ccd4445dca6b66b368f558b91276218e064cb504a71afc");
