@@ -14,4 +14,6 @@ public interface GiftcardProductRepository extends JpaRepository<GiftcardProduct
 
     @Query("SELECT p from GiftcardProduct p where p.saleYN = true order by p.price ASC ")
     List<GiftcardProduct> findBySaleYNOrderByPriceAsc(Boolean saleYN);
+
+    GiftcardProduct save(GiftcardProduct giftcardProduct);
 }
