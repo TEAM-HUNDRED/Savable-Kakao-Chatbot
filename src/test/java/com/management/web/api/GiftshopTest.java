@@ -1,8 +1,7 @@
-package com.management.web;
+package com.management.web.api;
 
 import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.MemberResponseDto;
-import com.management.web.service.GiftcardService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
