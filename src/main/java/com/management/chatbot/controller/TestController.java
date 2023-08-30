@@ -1,6 +1,6 @@
 package com.management.chatbot.controller;
 
-import com.management.chatbot.service.dto.KakaoResponseDto;
+import com.management.chatbot.service.dto.KakaoDto.KakaoResponseDto;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

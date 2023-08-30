@@ -17,7 +17,6 @@ public class KakaoBasicCardResponseDto {
 
         List<HashMap<String, Object>> outputs = new ArrayList<>();
         HashMap<String, Object> template = new HashMap<>();
-        HashMap<String, Object> basicCard = new HashMap<>();
 
         for (HashMap<String, Object> value : values) {
             outputs.add(value);

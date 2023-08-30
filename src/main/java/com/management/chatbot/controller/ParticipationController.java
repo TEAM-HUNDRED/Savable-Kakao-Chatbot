@@ -1,11 +1,9 @@
 package com.management.chatbot.controller;
 
-import com.management.chatbot.Exception.DefaultException;
 import com.management.chatbot.domain.CheckStatus;
 import com.management.chatbot.service.ChallengeService;
 import com.management.chatbot.service.MemberService;
 import com.management.chatbot.service.dto.ChallengeResponseDto;
-import com.management.chatbot.service.dto.KakaoBasicCardResponseDto;
 import com.management.chatbot.service.dto.KakaoDto.*;
 import com.management.chatbot.service.dto.MemberResponseDto;
 import com.management.chatbot.service.dto.ParticipationSaveRequestDto;
@@ -62,7 +60,7 @@ public class ParticipationController {
 
         carousel.put("carousel", carouselDto);
         outputs.add(carousel);
-        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+        return new KakaoResponseDto.KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
     public BasicCard makeBasicCard(Long challengeId) {// 챌린지별 basic 카드 생성
@@ -209,7 +207,7 @@ public class ParticipationController {
         simpleText2.put("simpleText", simpleTextDto2);
         outputs.add(simpleText2);
 
-        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+        return new KakaoResponseDto.KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 
     // endDate 계산해주는 함수
@@ -257,6 +255,6 @@ public class ParticipationController {
         HashMap<String, Object> basicCard = new HashMap<>();
         basicCard.put("basicCard", basicCardDto);
         outputs.add(basicCard);
-        return new KakaoBasicCardResponseDto().makeResponseBody(outputs);
+        return new KakaoResponseDto.KakaoBasicCardResponseDto().makeResponseBody(outputs);
     }
 }
