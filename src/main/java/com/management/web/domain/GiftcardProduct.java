@@ -1,6 +1,7 @@
 package com.management.web.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -25,7 +26,12 @@ public class GiftcardProduct {
 
     @Column(name = "sale_YN")
     private Boolean saleYN;
-//
-//    @OneToMany(mappedBy = "giftcardProduct")
-//    private List<GiftcardOrder> giftcardOrderList;
+
+    @Builder
+    public GiftcardProduct(String name, Long price, String image, Boolean saleYN) {
+        this.name = name;
+        this.price = price;
+        this.image = image;
+        this.saleYN = saleYN;
+    }
 }
