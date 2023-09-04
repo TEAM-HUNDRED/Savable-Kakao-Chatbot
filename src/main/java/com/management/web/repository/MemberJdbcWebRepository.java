@@ -152,14 +152,14 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
                 "     jsonb_array_elements(m.participation) AS data_row JOIN challenge c ON (data_row ->> 'challengeId')::integer=c.id\n" +
                 "WHERE m.kakao_id =?\n" +
                 "AND current_date >= (data_row ->> 'startDate')::date\n" +
-                "\tAND current_date <= (data_row ->> 'endDate')::date\n" +
+                "AND current_date <= (data_row ->> 'endDate')::date\n" +
                 "AND (data_row ->> 'challengeId')::integer = ?)\n" +
                 "SELECT\n" +
                 "  DATE_TRUNC('day', (cert_data->>'date')::timestamp) AS DAY,\n" +
                 "  count(1) AS count\n" +
                 "FROM \"member\" m ,\n" +
-                "\tpartiChall AS pc JOIN jsonb_array_elements(m.certification) AS data_row \n" +
-                "\tON (pc.challengeId = data_row ->> 'challenge_id'),\n" +
+                "partiChall AS pc JOIN jsonb_array_elements(m.certification) AS data_row \n" +
+                "ON (pc.challengeId = data_row ->> 'challenge_id'),\n" +
                 "    jsonb_array_elements(data_row->'cert') AS cert_data\n" +
                 "WHERE m.kakao_id = pc.kakao_id\n" +
                 "AND pc.startDate::date <= (cert_data->>'date')::date\n" +
@@ -167,6 +167,7 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
                 "AND cert_data->>'check' != 'FAIL'\n" +
                 "GROUP BY day;";
         List<MyChallengeCertDto> myChallengeCertList = template.query(sql, challengeCertRowMapper(),kakaoId,challengeId);
+        log.info("challenge list = {}", myChallengeCertList);
         return myChallengeCertList;
     }
 
@@ -217,7 +218,7 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
     private RowMapper<MyChallengeCertDto> challengeCertRowMapper() {
         return ((rs, rowNum) ->
                 MyChallengeCertDto.builder()
-                        .date(rs.getTimestamp("day"))
+                        .date(rs.getDate("day"))
                         .count(rs.getInt("count"))
                         .build()
         );

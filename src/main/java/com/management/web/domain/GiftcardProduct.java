@@ -25,7 +25,4 @@ public class GiftcardProduct {
 
     @Column(name = "sale_YN")
     private Boolean saleYN;
-//
-//    @OneToMany(mappedBy = "giftcardProduct")
-//    private List<GiftcardOrder> giftcardOrderList;
 }
