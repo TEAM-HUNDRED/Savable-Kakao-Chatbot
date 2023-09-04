@@ -2,14 +2,17 @@ package com.management.web.service;
 
 import com.management.chatbot.domain.Member;
 import com.management.chatbot.repository.MemberRepository;
+import com.management.web.domain.RankingHistory;
+import com.management.web.repository.MemberWebRepository;
+import com.management.web.repository.RankingHistoryRepository;
 import com.management.web.service.dto.MyPrivateRankingInfoDto;
 import com.management.web.service.dto.MyRankingInfoDto;
-import com.management.web.repository.MemberWebRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -18,6 +21,7 @@ public class RankingService {
 
     private final MemberWebRepository memberWebRepository;
     private final MemberRepository memberRepository;
+    private final RankingHistoryRepository rankingHistoryRepository;
 
     public List<MyRankingInfoDto> getMyRankingInfo(){
         return memberWebRepository.findRankingInfoList();
@@ -38,6 +42,13 @@ public class RankingService {
             Long additionalReward = Long.valueOf(getAdditionalRankingReward(rankingInfo.getCertRank()));
             String kakaoId = rankingInfo.getKakaoId();
             Member member = memberRepository.findByKakaoId(kakaoId);
+
+            // 현재 시간 timestamp
+            rankingHistoryRepository.save(RankingHistory.builder()
+                    .kakaoId(kakaoId)
+                    .reward(additionalReward)
+                    .date(new Timestamp(System.currentTimeMillis()))
+                    .build());
             member.updateReward(additionalReward);
         }
     }
