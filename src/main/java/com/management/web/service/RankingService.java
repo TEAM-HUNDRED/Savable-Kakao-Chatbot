@@ -31,9 +31,8 @@ public class RankingService {
     }
 
     @Transactional
-    @Scheduled(cron = "1 0 0 * * 1") // 매주 월요일 00:00:01 마다 실행
+    @Scheduled(cron = "0 59 23 * * 0") // 매주 일요일 23시 59분에 실행
     public void updateRanking() {
-
         List<MyRankingInfoDto> rankingInfoList = memberWebRepository.findRankingInfoList();
         for (MyRankingInfoDto rankingInfo : rankingInfoList) {
             if (rankingInfo.getCertRank() > 5){
