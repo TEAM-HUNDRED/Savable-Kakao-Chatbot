@@ -155,7 +155,7 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
                 "\tAND current_date <= (data_row ->> 'endDate')::date\n" +
                 "AND (data_row ->> 'challengeId')::integer = ?)\n" +
                 "SELECT\n" +
-                "  DATE_TRUNC('day', (cert_data->>'date')::timestamp) AS DAY,\n" +
+                "  DATE_TRUNC('day', (cert_data->>'date')::date) AS DAY,\n" +
                 "  count(1) AS count\n" +
                 "FROM \"member\" m ,\n" +
                 "\tpartiChall AS pc JOIN jsonb_array_elements(m.certification) AS data_row \n" +
@@ -217,7 +217,7 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
     private RowMapper<MyChallengeCertDto> challengeCertRowMapper() {
         return ((rs, rowNum) ->
                 MyChallengeCertDto.builder()
-                        .date(rs.getTimestamp("day"))
+                        .date(rs.getDate("day").toLocalDate())
                         .count(rs.getInt("count"))
                         .build()
         );
