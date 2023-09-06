@@ -28,7 +28,7 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
 
 
     @Override
-    public MyPrivateRankingInfoDto findPrivateRnkingByKakaoId(String kakaoId) {
+    public MyPrivateRankingInfoDto findPrivateRankingByKakaoId(String kakaoId) {
         String sql = "with rankingCert as(\n" +
                 "select\n" +
                 "  m.kakao_id,\n" +
