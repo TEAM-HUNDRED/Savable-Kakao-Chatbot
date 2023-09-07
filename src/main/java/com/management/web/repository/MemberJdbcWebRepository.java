@@ -98,40 +98,44 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
 
     @Override
     public List<MyRankingInfoDto> findRankingInfoList(){
-        String sql = "with rankingCert as(\n" +
-                "select\n" +
-                "  m.kakao_id,\n" +
-                "  m.username,\n" +
-                "  cert_data->>'date' AS date,\n" +
-                "  cert_data->>'check' as check,\n" +
-                "  data_row ->> 'challenge_id' as c_id\n" +
-                "FROM \"member\" m ,\n" +
-                "     jsonb_array_elements(m.certification) AS data_row,\n" +
-                "     jsonb_array_elements(data_row->'cert') AS cert_data\n" +
-                "where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date\n" +
-                "and cert_data->>'check' != 'FAIL')\n" +
-                "select r.username as username, r.kakao_id as kakaoId, sum(c.saved_money) as smoney, count(*) as cnt,\n" +
-                "rank() over (order by sum(c.saved_money) desc,  count(*) desc)\n" +
-                "from rankingCert r join challenge c on r.c_id::int = c.id\n" +
-                "group by r.username, r.kakao_id;";
+        String sql = """
+                with rankingCert as(
+                select
+                  m.kakao_id,
+                  m.username,
+                  cert_data->>'date' AS date,
+                  cert_data->>'check' as check,
+                  data_row ->> 'challenge_id' as c_id
+                FROM "member" m ,
+                     jsonb_array_elements(m.certification) AS data_row,
+                     jsonb_array_elements(data_row->'cert') AS cert_data
+                where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date
+                and cert_data->>'check' != 'FAIL')
+                select r.username as username, r.kakao_id as kakaoId, sum(c.saved_money) as smoney, count(*) as cnt,
+                rank() over (order by sum(c.saved_money) desc,  count(*) desc)
+                from rankingCert r join challenge c on r.c_id::int = c.id
+                group by r.username, r.kakao_id;
+                """;
         List<MyRankingInfoDto> certRankingList = template.query(sql, rankingRowMapper());
         return certRankingList;
     }
 
     @Override
     public List<MyChallengeInfoDto> findParticipateChallengeList(String kakaoId){
-        String sql="SELECT\n" +
-                "  c.title AS title,\n" +
-                "  m.username AS username,\n" +
-                "  data_row ->> 'certificationCnt' AS cnt,\n" +
-                "  c.reward*(data_row ->> 'certificationCnt')::int AS reward,\n" +
-                "  c.saved_money*(data_row ->> 'certificationCnt')::int AS saved_money,\n" +
-                "  data_row ->> 'challengeId' AS challengeId\n" +
-                "FROM \"member\" m ,\n" +
-                "     jsonb_array_elements(m.participation) AS data_row JOIN challenge c ON (data_row ->> 'challengeId')::integer=c.id\n" +
-                "WHERE m. kakao_id =?\n" +
-                "AND current_date >= (data_row ->> 'startDate')::date\n" +
-                "\tAND current_date <= (data_row ->> 'endDate')::date;";
+        String sql= """
+            SELECT
+              c.title AS title,
+              m.username AS username,
+              data_row ->> 'certificationCnt' AS cnt,
+              c.reward*(data_row ->> 'certificationCnt')::int AS reward,
+              c.saved_money*(data_row ->> 'certificationCnt')::int AS saved_money,
+              data_row ->> 'challengeId' AS challengeId
+            FROM "member" m,
+                 jsonb_array_elements(m.participation) AS data_row JOIN challenge c ON (data_row ->> 'challengeId')::integer=c.id
+            WHERE m. kakao_id =?
+            AND current_date >= (data_row ->> 'startDate')::date
+            AND current_date <= (data_row ->> 'endDate')::date;
+            """;
         List<MyChallengeInfoDto> myChallengeList = template.query(sql, challengeRowMapper(),kakaoId);
         return myChallengeList;
     }
