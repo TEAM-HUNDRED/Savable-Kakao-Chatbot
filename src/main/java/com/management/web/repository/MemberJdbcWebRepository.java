@@ -63,11 +63,11 @@ public class MemberJdbcWebRepository implements MemberWebRepository {
         return myChallengeCertList;
     }
 
+    @Value("${mainInfoSQL}")
+    String mainInfoQuery;
+    @Override
     public MyMainInfoDto findMainInfoByKakaoId(String kakaoId){
-        String sql = "select username, saved_money, reward\n" +
-                "from \"member\" m \n" +
-                "where kakao_id =?;";
-        MyMainInfoDto mainInfoDto = template.queryForObject(sql, mainInfoDtoRowMapper(),kakaoId);
+        MyMainInfoDto mainInfoDto = template.queryForObject(mainInfoQuery, mainInfoDtoRowMapper(),kakaoId);
         return mainInfoDto;
     }
 

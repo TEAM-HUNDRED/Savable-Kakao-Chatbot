@@ -69,29 +69,29 @@
     </entry>
     <entry key="participateChallengeListSQL">
         SELECT
-          c.title AS title,
-          m.username AS username,
-          data_row ->> 'certificationCnt' AS cnt,
-          c.reward*(data_row ->> 'certificationCnt')::int AS reward,
-          c.saved_money*(data_row ->> 'certificationCnt')::int AS saved_money,
-          data_row ->> 'challengeId' AS challengeId
-        FROM \"member\" m ,
-             jsonb_array_elements(m.participation) AS data_row JOIN challenge c ON (data_row ->> 'challengeId')::integer=c.id
+        c.title AS title,
+        m.username AS username,
+        data_row ->> 'certificationCnt' AS cnt,
+        c.reward*(data_row ->> 'certificationCnt')::int AS reward,
+        c.saved_money*(data_row ->> 'certificationCnt')::int AS saved_money,
+        data_row ->> 'challengeId' AS challengeId
+        FROM "member" m,
+        jsonb_array_elements(m.participation) AS data_row JOIN challenge c ON (data_row ->> 'challengeId')::integer=c.id
         WHERE m. kakao_id =?
         AND current_date >= (data_row ->> 'startDate')::date
-        \tAND current_date &lt;= (data_row ->> 'endDate')::date;
+        AND current_date &lt;= (data_row ->> 'endDate')::date;
     </entry>
     <entry key="rankingListSQL">
         with rankingCert as(
         select
-          m.kakao_id,
-          m.username,
-          cert_data->>'date' AS date,
-          cert_data->>'check' as check,
-          data_row ->> 'challenge_id' as c_id
-        FROM "member" m
-             jsonb_array_elements(m.certification) AS data_row,
-             jsonb_array_elements(data_row->'cert') AS cert_data
+        m.kakao_id,
+        m.username,
+        cert_data->>'date' AS date,
+        cert_data->>'check' as check,
+        data_row ->> 'challenge_id' as c_id
+        FROM "member" m ,
+        jsonb_array_elements(m.certification) AS data_row,
+        jsonb_array_elements(data_row->'cert') AS cert_data
         where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date
         and cert_data->>'check' != 'FAIL')
         select r.username as username, r.kakao_id as kakaoId, sum(c.saved_money) as smoney, count(*) as cnt,
@@ -128,5 +128,10 @@
         AND pc.endDate::date >=(cert_data->>'date')::date
         AND cert_data->>'check' != 'FAIL'
         GROUP BY day;
+    </entry>
+    <entry key="mainInfoSQL">
+        select username, saved_money, reward
+        from "member" m
+        where kakao_id =?;
     </entry>
 </properties>
