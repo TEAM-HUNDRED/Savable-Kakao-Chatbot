@@ -7,7 +7,7 @@ import java.util.List;
 public interface MemberWebRepository {
 
 
-    MyPrivateRankingInfoDto findPrivateRnkingByKakaoId(String kakaoId);
+    MyPrivateRankingInfoDto findPrivateRankingByKakaoId(String kakaoId);
 
     List<MyRankingInfoDto> findRankingInfoList();
 

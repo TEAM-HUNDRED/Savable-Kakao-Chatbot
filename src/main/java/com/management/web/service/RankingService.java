@@ -27,7 +27,7 @@ public class RankingService {
         return memberWebRepository.findRankingInfoList();
     }
     public MyPrivateRankingInfoDto getMyPrivateRankingInfo(String kakaoId) {
-        return memberWebRepository.findPrivateRnkingByKakaoId(kakaoId);
+        return memberWebRepository.findPrivateRankingByKakaoId(kakaoId);
     }
 
     @Transactional

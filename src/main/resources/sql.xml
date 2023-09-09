@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd" >
+<properties>
+    <entry key="privateRankingSQL">
+        with rankingCert as(
+        select
+        m.kakao_id,
+        m.username,
+        cert_data->>'date' AS date,
+        cert_data->>'check' as check,
+        data_row ->> 'challenge_id' as c_id
+        FROM "member" m ,
+        jsonb_array_elements(m.certification) AS data_row,
+        jsonb_array_elements(data_row->'cert') AS cert_data
+        where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date
+        and cert_data->>'check' != 'FAIL'),
+        ranked_members as (select r.username as username,
+        sum(c.saved_money) as smoney,
+        count(*) as cnt,
+        r.kakao_id as kakao_id,
+        rank() over (order by sum(c.saved_money) desc,count(*) desc)
+        from rankingCert r join challenge c on r.c_id::int = c.id
+        group by r.username,r.kakao_id),
+        oneMember as(
+        select * from ranked_members rr
+        where rr.kakao_id = ? )
+        select
+        case when o.rank::integer = 1::integer then 0 else rrr.smoney-o.smoney end as gap,
+        o.username as username,
+        o.rank as myrank,
+        o.cnt as mycnt,
+        o.smoney as mysmoney
+        from ranked_members rrr, oneMember o
+        where rrr.rank&lt; o.rank or o.rank = 1
+        order by rrr.smoney,rrr.rank desc
+        limit 1;
+    </entry>
+    <entry key="privateRankingNullSQL">
+        with rankingCert as(
+        select
+        m.kakao_id,
+        m.username,
+        cert_data->>'date' AS date,
+        cert_data->>'check' as check,
+        data_row ->> 'challenge_id' as c_id
+        FROM "member" m ,
+        jsonb_array_elements(m.certification) AS data_row,
+        jsonb_array_elements(data_row->'cert') AS cert_data
+        where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date
+        and cert_data->>'check' != 'FAIL'),
+        rankingResult as (
+        select
+        r.username as username,
+        sum(c.saved_money) as smoney,
+        count(*) as cnt,
+        r.kakao_id,
+        rank() over (order by sum(c.saved_money) desc,  count(*) desc)
+        from rankingCert r join challenge c on r.c_id::int = c.id
+        group by r.username,r.kakao_id)
+        select
+        min(rr.smoney) as gap,
+        max(rr.rank)+1 as myRank,
+        m.username as username,
+        0 as mysmoney,
+        0 as mycnt
+        from rankingResult rr, member m
+        where m.kakao_id=?
+        group by m.username;
+    </entry>
+    <entry key="participateChallengeListSQL">
+        SELECT
+        c.title AS title,
+        m.username AS username,
+        data_row ->> 'certificationCnt' AS cnt,
+        c.reward*(data_row ->> 'certificationCnt')::int AS reward,
+        c.saved_money*(data_row ->> 'certificationCnt')::int AS saved_money,
+        data_row ->> 'challengeId' AS challengeId
+        FROM "member" m,
+        jsonb_array_elements(m.participation) AS data_row JOIN challenge c ON (data_row ->> 'challengeId')::integer=c.id
+        WHERE m. kakao_id =?
+        AND current_date >= (data_row ->> 'startDate')::date
+        AND current_date &lt;= (data_row ->> 'endDate')::date;
+    </entry>
+    <entry key="rankingListSQL">
+        with rankingCert as(
+        select
+        m.kakao_id,
+        m.username,
+        cert_data->>'date' AS date,
+        cert_data->>'check' as check,
+        data_row ->> 'challenge_id' as c_id
+        FROM "member" m ,
+        jsonb_array_elements(m.certification) AS data_row,
+        jsonb_array_elements(data_row->'cert') AS cert_data
+        where CAST(cert_data ->> 'date' as date) >= date_trunc('week',current_date)::date
+        and cert_data->>'check' != 'FAIL')
+        select r.username as username, r.kakao_id as kakaoId, sum(c.saved_money) as smoney, count(*) as cnt,
+        rank() over (order by sum(c.saved_money) desc,  count(*) desc)
+        from rankingCert r join challenge c on r.c_id::int = c.id
+        group by r.username, r.kakao_id;
+    </entry>
+    <entry key="challengeCertListSQL">
+        WITH partiChall AS(SELECT
+        m.username,
+        m.kakao_id AS kakao_id,
+        c.title AS title,
+        data_row ->> 'startDate' AS startDate,
+        data_row ->> 'endDate' AS endDate,
+        data_row ->> 'goalCnt' AS goalCnt,
+        data_row ->> 'challengeId' AS challengeId,
+        data_row ->> 'certificationCnt' AS certificationCnt,
+        data_row ->> 'isSuccess' AS isSuccess
+        FROM "member" m ,
+        jsonb_array_elements(m.participation) AS data_row JOIN challenge c ON (data_row ->> 'challengeId')::integer=c.id
+        WHERE m.kakao_id =?
+        AND current_date >= (data_row ->> 'startDate')::date
+        AND current_date &lt;= (data_row ->> 'endDate')::date
+        AND (data_row ->> 'challengeId')::integer = ?)
+        SELECT
+        (cert_data->>'date')::date AS DAY,
+        count(1) AS count
+        FROM "member" m ,
+        partiChall AS pc JOIN jsonb_array_elements(m.certification) AS data_row
+        ON (pc.challengeId = data_row ->> 'challenge_id'),
+        jsonb_array_elements(data_row->'cert') AS cert_data
+        WHERE m.kakao_id = pc.kakao_id
+        AND pc.startDate::date &lt;= (cert_data->>'date')::date
+        AND pc.endDate::date >=(cert_data->>'date')::date
+        AND cert_data->>'check' != 'FAIL'
+        GROUP BY day;
+    </entry>
+    <entry key="mainInfoSQL">
+        select username, saved_money, reward
+        from "member" m
+        where kakao_id =?;
+    </entry>
+</properties>
