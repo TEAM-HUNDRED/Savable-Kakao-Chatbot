@@ -31,7 +31,7 @@ public class RankingService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 59 23 * * 0") // 매주 일요일 23시 59분에 실행
+//    @Scheduled(cron = "0 59 23 * * 0") // 매주 일요일 23시 59분에 실행 // 2023.11.15 서비스 종료로 미사용
     public void updateRanking() {
         List<MyRankingInfoDto> rankingInfoList = memberWebRepository.findRankingInfoList();
         for (MyRankingInfoDto rankingInfo : rankingInfoList) {
